@@ -11,6 +11,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,7 +32,11 @@ fun DashboardScreen(
 ) {
     val totalRevenue by viewModel.totalRevenue.collectAsState()
     val totalVat by viewModel.totalVat.collectAsState()
+    val totalExpenses by viewModel.totalExpenses.collectAsState()
+    val netProfit by viewModel.netProfit.collectAsState()
     val rides by viewModel.rides.collectAsState()
+
+    var showExpenseSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -41,12 +48,22 @@ fun DashboardScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onNavigateToAddRide,
-                containerColor = NeonYellow,
-                contentColor = CyberBackground
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Ride")
+            Column(horizontalAlignment = Alignment.End) {
+                FloatingActionButton(
+                    onClick = { showExpenseSheet = true },
+                    containerColor = NeonPurple,
+                    contentColor = CyberBackground,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                ) {
+                    Text("- EXPENSE", fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 12.dp))
+                }
+                FloatingActionButton(
+                    onClick = onNavigateToAddRide,
+                    containerColor = NeonYellow,
+                    contentColor = CyberBackground
+                ) {
+                    Text("+ RIDE", fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 12.dp))
+                }
             }
         },
         containerColor = CyberBackground
@@ -89,6 +106,34 @@ fun DashboardScreen(
                             text = String.format(Locale.US, "%.2f €", totalVat),
                             color = NeonPurple,
                             fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "EXPENSES", color = TextSecondary)
+                        Text(
+                            text = String.format(Locale.US, "%.2f €", totalExpenses),
+                            color = NeonPurple,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    HorizontalDivider(
+                        color = NeonCyan.copy(alpha = 0.3f),
+                        modifier = Modifier.padding(vertical = 12.dp)
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "NET PROFIT", color = NeonCyan, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text(
+                            text = String.format(Locale.US, "%.2f €", netProfit),
+                            color = if (netProfit >= 0) NeonCyan else NeonPurple,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
                         )
                     }
                 }
@@ -142,5 +187,14 @@ fun DashboardScreen(
                 }
             }
         }
+    }
+
+    if (showExpenseSheet) {
+        AddExpenseBottomSheet(
+            onDismiss = { showExpenseSheet = false },
+            onSave = { amount, category ->
+                viewModel.addExpense(amount, category)
+            }
+        )
     }
 }

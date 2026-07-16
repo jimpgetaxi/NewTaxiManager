@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.jimpgetaxi.taximanager.data.AppDatabase
 import com.jimpgetaxi.taximanager.data.RideDao
+import com.jimpgetaxi.taximanager.data.ExpenseDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,12 +22,20 @@ object AppModule {
             app,
             AppDatabase::class.java,
             "taxi_manager_db"
-        ).build()
+        )
+        .fallbackToDestructiveMigration()
+        .build()
     }
 
     @Provides
     @Singleton
     fun provideRideDao(db: AppDatabase): RideDao {
         return db.rideDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideExpenseDao(db: AppDatabase): ExpenseDao {
+        return db.expenseDao
     }
 }

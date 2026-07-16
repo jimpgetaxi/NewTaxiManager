@@ -6,11 +6,15 @@ import javax.inject.Singleton
 
 @Singleton
 class RideRepository @Inject constructor(
-    private val dao: RideDao
+    private val dao: RideDao,
+    private val expenseDao: ExpenseDao
 ) {
     fun getAllRides(): Flow<List<Ride>> = dao.getAllRides()
     fun getTotalRevenue(): Flow<Double?> = dao.getTotalRevenue()
     fun getTotalVat(): Flow<Double?> = dao.getTotalVat()
+    
+    fun getAllExpenses(): Flow<List<Expense>> = expenseDao.getAllExpenses()
+    fun getTotalExpenses(): Flow<Double?> = expenseDao.getTotalExpenses()
 
     suspend fun insertRide(actualAmount: Double, receiptAmount: Double) {
         // Υπολογισμός ΦΠΑ (13%) βάσει της απόδειξης
@@ -22,5 +26,13 @@ class RideRepository @Inject constructor(
             vatAmount = vatAmount
         )
         dao.insertRide(ride)
+    }
+
+    suspend fun insertExpense(amount: Double, category: String) {
+        val expense = Expense(
+            amount = amount,
+            category = category
+        )
+        expenseDao.insertExpense(expense)
     }
 }
