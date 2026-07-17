@@ -8,6 +8,10 @@ val NeonCyan = Color(0xFF00F0FF)
 
 val CyberBackground = Color(0xFF0D0D12)
 val CyberSurface = Color(0xFF1A1A24)
+val GlassSurface = Color(0x331A1A24) // 20% alpha
+
+val NeonCyanTranslucent = Color(0x2600F0FF) // 15% alpha
+val NeonPurpleTranslucent = Color(0x26B026FF)
 
 val TextPrimary = Color(0xFFFFFFFF)
 val TextSecondary = Color(0xFFA0A0B0)

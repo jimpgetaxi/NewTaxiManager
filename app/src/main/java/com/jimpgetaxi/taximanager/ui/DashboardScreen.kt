@@ -1,6 +1,7 @@
 package com.jimpgetaxi.taximanager.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,9 +18,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jimpgetaxi.taximanager.R
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,7 +44,7 @@ fun DashboardScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("TaxiManager Command Center", color = NeonCyan) },
+                title = { Text(stringResource(R.string.command_center_title), color = NeonCyan) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = CyberBackground
                 )
@@ -55,14 +58,14 @@ fun DashboardScreen(
                     contentColor = CyberBackground,
                     modifier = Modifier.padding(bottom = 16.dp)
                 ) {
-                    Text("- EXPENSE", fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 12.dp))
+                    Text(stringResource(R.string.add_expense_btn), fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 12.dp))
                 }
                 FloatingActionButton(
                     onClick = onNavigateToAddRide,
                     containerColor = NeonYellow,
                     contentColor = CyberBackground
                 ) {
-                    Text("+ RIDE", fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 12.dp))
+                    Text(stringResource(R.string.add_ride_btn), fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 12.dp))
                 }
             }
         },
@@ -76,8 +79,10 @@ fun DashboardScreen(
         ) {
             // Cyberpunk Revenue Card
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = CyberSurface),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, NeonCyanTranslucent, RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(containerColor = GlassSurface),
                 shape = RoundedCornerShape(16.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
             ) {
@@ -86,7 +91,7 @@ fun DashboardScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "TOTAL REVENUE",
+                        text = stringResource(R.string.total_revenue),
                         color = TextSecondary,
                         fontSize = 14.sp,
                         letterSpacing = 2.sp
@@ -101,7 +106,7 @@ fun DashboardScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "VAT (13%)", color = TextSecondary)
+                        Text(text = stringResource(R.string.vat_label), color = TextSecondary)
                         Text(
                             text = String.format(Locale.US, "%.2f €", totalVat),
                             color = NeonPurple,
@@ -113,7 +118,7 @@ fun DashboardScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "EXPENSES", color = TextSecondary)
+                        Text(text = stringResource(R.string.expenses_label), color = TextSecondary)
                         Text(
                             text = String.format(Locale.US, "%.2f €", totalExpenses),
                             color = NeonPurple,
@@ -121,14 +126,14 @@ fun DashboardScreen(
                         )
                     }
                     HorizontalDivider(
-                        color = NeonCyan.copy(alpha = 0.3f),
+                        color = NeonCyanTranslucent,
                         modifier = Modifier.padding(vertical = 12.dp)
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "NET PROFIT", color = NeonCyan, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text(text = stringResource(R.string.net_profit_label), color = NeonCyan, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         Text(
                             text = String.format(Locale.US, "%.2f €", netProfit),
                             color = if (netProfit >= 0) NeonCyan else NeonPurple,
@@ -141,7 +146,7 @@ fun DashboardScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = "RECENT RIDES",
+                text = stringResource(R.string.recent_rides),
                 color = NeonCyan,
                 fontSize = 14.sp,
                 letterSpacing = 2.sp
@@ -159,7 +164,8 @@ fun DashboardScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(8.dp))
-                            .background(CyberSurface)
+                            .border(1.dp, NeonPurpleTranslucent, RoundedCornerShape(8.dp))
+                            .background(GlassSurface)
                             .padding(16.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
@@ -168,17 +174,17 @@ fun DashboardScreen(
                             Text(text = dateString, color = TextSecondary, fontSize = 12.sp)
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = String.format(Locale.US, "Actual: %.2f €", ride.actualAmount),
+                                text = String.format(Locale.US, "%s %.2f €", stringResource(R.string.actual_label), ride.actualAmount),
                                 color = TextPrimary
                             )
                         }
                         Column(horizontalAlignment = Alignment.End) {
                             Text(
-                                text = String.format(Locale.US, "Rec: %.2f €", ride.receiptAmount),
+                                text = String.format(Locale.US, "%s %.2f €", stringResource(R.string.receipt_label), ride.receiptAmount),
                                 color = TextSecondary
                             )
                             Text(
-                                text = String.format(Locale.US, "VAT: %.2f €", ride.vatAmount),
+                                text = String.format(Locale.US, "%s %.2f €", stringResource(R.string.vat_short_label), ride.vatAmount),
                                 color = NeonPurple,
                                 fontSize = 12.sp
                             )

@@ -18,10 +18,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jimpgetaxi.taximanager.ui.theme.CyberBackground
-import com.jimpgetaxi.taximanager.ui.theme.NeonCyan
-import com.jimpgetaxi.taximanager.ui.theme.NeonPurple
-import com.jimpgetaxi.taximanager.ui.theme.NeonYellow
+import androidx.compose.ui.res.stringResource
+import com.jimpgetaxi.taximanager.R
+import com.jimpgetaxi.taximanager.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,11 +29,26 @@ fun AddExpenseBottomSheet(
     onSave: (amount: String, category: String) -> Unit
 ) {
     var amount by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("Καύσιμα") }
+    val otherCategoryString = stringResource(R.string.cat_other)
+    var selectedCategory by remember { mutableStateOf("") }
     var customCategory by remember { mutableStateOf("") }
     var showCustomInput by remember { mutableStateOf(false) }
 
-    val categories = listOf("Καύσιμα", "Καφές", "Διόδια", "Πλύσιμο", "Service", "Άλλο")
+    val categories = listOf(
+        stringResource(R.string.cat_fuel),
+        stringResource(R.string.cat_coffee),
+        stringResource(R.string.cat_tolls),
+        stringResource(R.string.cat_wash),
+        stringResource(R.string.cat_service),
+        otherCategoryString
+    )
+    
+    // Set default category on first composition after strings are loaded
+    LaunchedEffect(categories.firstOrNull()) {
+        if (selectedCategory.isEmpty() && categories.isNotEmpty()) {
+            selectedCategory = categories[0]
+        }
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -48,7 +62,7 @@ fun AddExpenseBottomSheet(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "NEW EXPENSE",
+                text = stringResource(R.string.new_expense_title),
                 color = NeonPurple,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -59,7 +73,7 @@ fun AddExpenseBottomSheet(
             OutlinedTextField(
                 value = amount,
                 onValueChange = { amount = it },
-                label = { Text("Ποσό (€)", color = NeonCyan) },
+                label = { Text(stringResource(R.string.amount_eur), color = NeonCyan) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -71,7 +85,7 @@ fun AddExpenseBottomSheet(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text("Κατηγορία:", color = NeonCyan, modifier = Modifier.align(Alignment.Start))
+            Text(stringResource(R.string.category_label), color = NeonCyan, modifier = Modifier.align(Alignment.Start))
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyVerticalGrid(
@@ -88,7 +102,7 @@ fun AddExpenseBottomSheet(
                             .background(if (isSelected) NeonPurple else CyberBackground)
                             .clickable {
                                 selectedCategory = category
-                                showCustomInput = category == "Άλλο"
+                                showCustomInput = category == otherCategoryString
                             }
                             .padding(8.dp),
                         contentAlignment = Alignment.Center
@@ -108,7 +122,7 @@ fun AddExpenseBottomSheet(
                 OutlinedTextField(
                     value = customCategory,
                     onValueChange = { customCategory = it },
-                    label = { Text("Πληκτρολόγησε Κατηγορία", color = NeonCyan) },
+                    label = { Text(stringResource(R.string.type_custom_category), color = NeonCyan) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = NeonCyan,
@@ -123,7 +137,7 @@ fun AddExpenseBottomSheet(
 
             Button(
                 onClick = {
-                    val finalCategory = if (selectedCategory == "Άλλο" && customCategory.isNotBlank()) {
+                    val finalCategory = if (selectedCategory == otherCategoryString && customCategory.isNotBlank()) {
                         customCategory
                     } else {
                         selectedCategory
@@ -139,7 +153,7 @@ fun AddExpenseBottomSheet(
                 colors = ButtonDefaults.buttonColors(containerColor = NeonCyan)
             ) {
                 Text(
-                    text = "SAVE EXPENSE",
+                    text = stringResource(R.string.save_expense_btn),
                     color = CyberBackground,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,

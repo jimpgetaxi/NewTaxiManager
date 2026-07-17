@@ -1,16 +1,19 @@
 package com.jimpgetaxi.taximanager.ui
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.jimpgetaxi.taximanager.R
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.util.Locale
 
@@ -30,10 +33,10 @@ fun AddRideScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Add Ride", color = NeonCyan) },
+                title = { Text(stringResource(R.string.new_ride_title), color = NeonCyan) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = NeonCyan)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = NeonCyan)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -52,7 +55,7 @@ fun AddRideScreen(
             OutlinedTextField(
                 value = actualAmount,
                 onValueChange = { actualAmount = it },
-                label = { Text("Ποσό Είσπραξης (Actual)") },
+                label = { Text(stringResource(R.string.actual_amount_label)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -70,7 +73,7 @@ fun AddRideScreen(
             OutlinedTextField(
                 value = receiptAmount,
                 onValueChange = { receiptAmount = it },
-                label = { Text("Ποσό Απόδειξης (Receipt)") },
+                label = { Text(stringResource(R.string.receipt_amount_label)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -86,8 +89,11 @@ fun AddRideScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Card(
-                colors = CardDefaults.cardColors(containerColor = CyberSurface),
-                modifier = Modifier.fillMaxWidth()
+                colors = CardDefaults.cardColors(containerColor = GlassSurface),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, NeonCyanTranslucent, RoundedCornerShape(16.dp))
             ) {
                 PaddingValues(16.dp).let {
                     Row(
@@ -96,7 +102,7 @@ fun AddRideScreen(
                             .padding(16.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Υπολογιζόμενος ΦΠΑ (13%):", color = TextSecondary)
+                        Text(stringResource(R.string.vat_label), color = TextSecondary)
                         Text(
                             text = String.format(Locale.US, "%.2f €", estimatedVat),
                             color = NeonPurple,
@@ -122,7 +128,7 @@ fun AddRideScreen(
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
-                    text = "ΑΠΟΘΗΚΕΥΣΗ (SAVE)",
+                    text = stringResource(R.string.save_ride_btn),
                     color = CyberBackground,
                     fontWeight = FontWeight.Black
                 )
