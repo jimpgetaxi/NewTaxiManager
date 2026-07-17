@@ -16,6 +16,11 @@ class RideRepository @Inject constructor(
     fun getAllExpenses(): Flow<List<Expense>> = expenseDao.getAllExpenses()
     fun getTotalExpenses(): Flow<Double?> = expenseDao.getTotalExpenses()
 
+    fun getRidesSince(since: Long): Flow<List<Ride>> = dao.getRidesSince(since)
+    fun getTotalRevenueSince(since: Long): Flow<Double?> = dao.getTotalRevenueSince(since)
+    fun getTotalVatSince(since: Long): Flow<Double?> = dao.getTotalVatSince(since)
+    fun getTotalExpensesSince(since: Long): Flow<Double?> = expenseDao.getTotalExpensesSince(since)
+
     suspend fun insertRide(actualAmount: Double, receiptAmount: Double) {
         // Υπολογισμός ΦΠΑ (13%) βάσει της απόδειξης
         val vatAmount = (receiptAmount / 1.13) * 0.13

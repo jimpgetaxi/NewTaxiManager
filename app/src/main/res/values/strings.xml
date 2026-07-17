@@ -5,6 +5,12 @@
     <string name="vat_label">ΦΠΑ (13%)</string>
     <string name="expenses_label">ΕΞΟΔΑ</string>
     <string name="net_profit_label">ΚΑΘΑΡΟ ΚΕΡΔΟΣ</string>
+    <string name="live_vehicle_cost_label">Live Κόστος Φθοράς:</string>
+    
+    <!-- Odometer Stats -->
+    <string name="initial_odometer_label">Αρχικός Χιλιομετρητής:</string>
+    <string name="current_odometer_label">Τρέχων Χιλιομετρητής:</string>
+    <string name="shift_distance_label">Διανυθέντα Χιλιόμετρα:</string>
     <string name="add_expense_btn">- ΕΞΟΔΟ</string>
     <string name="add_ride_btn">+ ΚΟΥΡΣΑ</string>
     <string name="recent_rides">ΙΣΤΟΡΙΚΟ ΚΙΝΗΣΕΩΝ</string>
@@ -28,4 +34,18 @@
     <string name="cat_wash">Πλύσιμο</string>
     <string name="cat_service">Service</string>
     <string name="cat_other">Άλλο</string>
+    
+    <!-- Shift Management -->
+    <string name="start_shift_btn">ΕΝΑΡΞΗ ΒΑΡΔΙΑΣ</string>
+    <string name="end_shift_btn">ΛΗΞΗ ΒΑΡΔΙΑΣ</string>
+    <string name="shift_start_odo_label">Αρχικός Χιλιομετρητής</string>
+    <string name="shift_cost_km_label">Κόστος / χλμ (€)</string>
+    <string name="shift_end_odo_label">Τελικός Χιλιομετρητής</string>
+    <string name="start_shift_title">ΕΝΑΡΞΗ ΒΑΡΔΙΑΣ</string>
+    <string name="end_shift_title">ΛΗΞΗ ΒΑΡΔΙΑΣ</string>
+    <string name="cancel_btn">ΑΚΥΡΟ</string>
+    <string name="confirm_btn">ΕΠΙΒΕΒΑΙΩΣΗ</string>
+    <string name="estimated_cost_label">Υπολογιζόμενο Κόστος:</string>
+    <string name="vehicle_maintenance_category">Έξοδα Οχήματος</string>
+    <string name="optional_odometer_label">Τρέχων Χιλιομετρητής (Προαιρετικό)</string>
 </resources>

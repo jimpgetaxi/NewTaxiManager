@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 import com.jimpgetaxi.taximanager.R
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.util.Locale
@@ -25,6 +26,7 @@ fun AddRideScreen(
 ) {
     var actualAmount by remember { mutableStateOf("") }
     var receiptAmount by remember { mutableStateOf("") }
+    var currentOdometer by remember { mutableStateOf("") }
 
     // Live VAT calculation
     val receiptVal = receiptAmount.replace(",", ".").toDoubleOrNull() ?: 0.0
@@ -86,6 +88,24 @@ fun AddRideScreen(
                 )
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = currentOdometer,
+                onValueChange = { currentOdometer = it },
+                label = { Text(stringResource(R.string.optional_odometer_label)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = NeonPurple,
+                    unfocusedBorderColor = TextSecondary,
+                    focusedTextColor = TextPrimary,
+                    unfocusedTextColor = TextPrimary,
+                    focusedLabelColor = NeonPurple,
+                    unfocusedLabelColor = TextSecondary
+                )
+            )
+
             Spacer(modifier = Modifier.height(24.dp))
 
             Card(
@@ -117,7 +137,7 @@ fun AddRideScreen(
             Button(
                 onClick = {
                     if (actualAmount.isNotBlank() && receiptAmount.isNotBlank()) {
-                        viewModel.addRide(actualAmount, receiptAmount)
+                        viewModel.addRide(actualAmount, receiptAmount, currentOdometer)
                         onBack()
                     }
                 },
@@ -129,7 +149,7 @@ fun AddRideScreen(
             ) {
                 Text(
                     text = stringResource(R.string.save_ride_btn),
-                    color = CyberBackground,
+                    color = Color.Black,
                     fontWeight = FontWeight.Black
                 )
             }
