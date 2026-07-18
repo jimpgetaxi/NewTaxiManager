@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.border
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -100,6 +101,10 @@ fun AddExpenseBottomSheet(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
                             .background(if (isSelected) NeonPurple else CyberBackground)
+                            .then(
+                                if (isSelected) Modifier.neonGlow(NeonPurple, cornerRadius = 8.dp, blurRadius = 12.dp)
+                                else Modifier.border(0.5.dp, NeonCyan.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                            )
                             .clickable {
                                 selectedCategory = category
                                 showCustomInput = category == otherCategoryString
@@ -149,8 +154,10 @@ fun AddExpenseBottomSheet(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = NeonCyan)
+                    .height(56.dp)
+                    .neonGlow(NeonCyan, cornerRadius = 24.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = NeonCyan),
+                shape = RoundedCornerShape(24.dp)
             ) {
                 Text(
                     text = stringResource(R.string.save_expense_btn),

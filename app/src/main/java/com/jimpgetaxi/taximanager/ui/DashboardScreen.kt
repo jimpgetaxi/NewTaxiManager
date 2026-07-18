@@ -109,11 +109,12 @@ fun DashboardScreen(
                     .height(56.dp)
                     .neonGlow(if (isShiftActive) NeonPurple else NeonYellow, cornerRadius = 24.dp)
                     .border(
-                        1.dp,
+                        0.5.dp,
                         Brush.linearGradient(
                             listOf(
-                                if (isShiftActive) NeonPurple else NeonYellow,
-                                if (isShiftActive) NeonCyan else NeonPurple
+                                (if (isShiftActive) NeonPurple else NeonYellow).copy(alpha = 0.5f),
+                                Color.Transparent,
+                                (if (isShiftActive) NeonCyan else NeonPurple).copy(alpha = 0.5f)
                             )
                         ),
                         RoundedCornerShape(24.dp)
@@ -139,8 +140,8 @@ fun DashboardScreen(
                     .clip(RoundedCornerShape(24.dp))
                     .background(GlassSurface)
                     .border(
-                        1.dp,
-                        Brush.linearGradient(listOf(NeonCyan, NeonPurple)),
+                        0.5.dp,
+                        Brush.linearGradient(listOf(NeonCyan.copy(alpha=0.5f), Color.Transparent, NeonPurple.copy(alpha=0.5f))),
                         RoundedCornerShape(24.dp)
                     )
             ) {
@@ -274,8 +275,8 @@ fun DashboardScreen(
                             .clip(RoundedCornerShape(24.dp))
                             .background(GlassSurface)
                             .border(
-                                1.dp,
-                                Brush.linearGradient(listOf(NeonPurple, NeonCyan)),
+                                0.5.dp,
+                                Brush.linearGradient(listOf(NeonPurple.copy(alpha=0.5f), Color.Transparent, NeonCyan.copy(alpha=0.5f))),
                                 RoundedCornerShape(24.dp)
                             )
                             .padding(16.dp),

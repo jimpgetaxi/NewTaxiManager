@@ -9,6 +9,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,12 +31,17 @@ fun StartShiftDialog(
     var cost by remember { mutableStateOf(initialCostPerKm.toString()) }
 
     Dialog(onDismissRequest = onDismiss) {
-        Card(
-            colors = CardDefaults.cardColors(containerColor = GlassSurface),
-            shape = RoundedCornerShape(16.dp),
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, NeonYellowTranslucent, RoundedCornerShape(16.dp))
+                .neonGlow(NeonYellowTranslucent, cornerRadius = 24.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(GlassSurface)
+                .border(
+                    0.5.dp,
+                    Brush.linearGradient(listOf(NeonYellow.copy(alpha=0.5f), Color.Transparent)),
+                    RoundedCornerShape(24.dp)
+                )
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
                 Text(
@@ -89,7 +96,9 @@ fun StartShiftDialog(
                                 onConfirm(odo, cost)
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = NeonYellow)
+                        colors = ButtonDefaults.buttonColors(containerColor = NeonYellow),
+                        shape = RoundedCornerShape(24.dp),
+                        modifier = Modifier.neonGlow(NeonYellow, cornerRadius = 24.dp)
                     ) {
                         Text(stringResource(R.string.confirm_btn), color = CyberBackground, fontWeight = FontWeight.Bold)
                     }
@@ -114,12 +123,17 @@ fun EndShiftDialog(
     val estimatedCost = distance * costPerKm
 
     Dialog(onDismissRequest = onDismiss) {
-        Card(
-            colors = CardDefaults.cardColors(containerColor = GlassSurface),
-            shape = RoundedCornerShape(16.dp),
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, NeonPurpleTranslucent, RoundedCornerShape(16.dp))
+                .neonGlow(NeonPurpleTranslucent, cornerRadius = 24.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(GlassSurface)
+                .border(
+                    0.5.dp,
+                    Brush.linearGradient(listOf(NeonPurple.copy(alpha=0.5f), Color.Transparent)),
+                    RoundedCornerShape(24.dp)
+                )
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
                 Text(
@@ -176,7 +190,9 @@ fun EndShiftDialog(
                                 onConfirm(endOdoStr)
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = NeonPurple)
+                        colors = ButtonDefaults.buttonColors(containerColor = NeonPurple),
+                        shape = RoundedCornerShape(24.dp),
+                        modifier = Modifier.neonGlow(NeonPurple, cornerRadius = 24.dp)
                     ) {
                         Text(stringResource(R.string.confirm_btn), color = CyberBackground, fontWeight = FontWeight.Bold)
                     }

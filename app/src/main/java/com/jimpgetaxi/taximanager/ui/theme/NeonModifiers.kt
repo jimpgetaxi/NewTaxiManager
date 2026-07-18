@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 fun Modifier.neonGlow(
     color: Color,
     cornerRadius: Dp = 24.dp,
-    blurRadius: Dp = 12.dp
+    blurRadius: Dp = 20.dp
 ): Modifier = this.drawWithCache {
     val paint = Paint()
     val frameworkPaint = paint.asFrameworkPaint()
@@ -31,18 +31,15 @@ fun Modifier.neonGlow(
         val cornerRadiusPx = cornerRadius.toPx()
         
         drawIntoCanvas { canvas ->
-            // Draw multiple times to increase the intensity/opacity of the glow
-            for (i in 0 until 3) {
-                canvas.drawRoundRect(
-                    left = 0f,
-                    top = 0f,
-                    right = size.width,
-                    bottom = size.height,
-                    radiusX = cornerRadiusPx,
-                    radiusY = cornerRadiusPx,
-                    paint = paint
-                )
-            }
+            canvas.drawRoundRect(
+                left = 0f,
+                top = 0f,
+                right = size.width,
+                bottom = size.height,
+                radiusX = cornerRadiusPx,
+                radiusY = cornerRadiusPx,
+                paint = paint
+            )
         }
     }
 }

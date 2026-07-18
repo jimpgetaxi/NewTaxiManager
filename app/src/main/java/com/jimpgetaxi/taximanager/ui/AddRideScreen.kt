@@ -118,8 +118,8 @@ fun AddRideScreen(
                     .clip(RoundedCornerShape(24.dp))
                     .background(GlassSurface)
                     .border(
-                        1.dp,
-                        Brush.linearGradient(listOf(NeonCyan, NeonPurple)),
+                        0.5.dp,
+                        Brush.linearGradient(listOf(NeonCyan.copy(alpha=0.5f), Color.Transparent, NeonPurple.copy(alpha=0.5f))),
                         RoundedCornerShape(24.dp)
                     )
             ) {
