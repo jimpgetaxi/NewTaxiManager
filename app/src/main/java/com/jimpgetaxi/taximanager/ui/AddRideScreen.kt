@@ -13,7 +13,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.background
 import com.jimpgetaxi.taximanager.R
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.util.Locale
@@ -108,12 +111,17 @@ fun AddRideScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Card(
-                colors = CardDefaults.cardColors(containerColor = GlassSurface),
-                shape = RoundedCornerShape(16.dp),
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, NeonCyanTranslucent, RoundedCornerShape(16.dp))
+                    .neonGlow(NeonCyanTranslucent, cornerRadius = 24.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(GlassSurface)
+                    .border(
+                        1.dp,
+                        Brush.linearGradient(listOf(NeonCyan, NeonPurple)),
+                        RoundedCornerShape(24.dp)
+                    )
             ) {
                 PaddingValues(16.dp).let {
                     Row(
@@ -143,9 +151,10 @@ fun AddRideScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(56.dp)
+                    .neonGlow(NeonYellow, cornerRadius = 24.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = NeonYellow),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(24.dp)
             ) {
                 Text(
                     text = stringResource(R.string.save_ride_btn),

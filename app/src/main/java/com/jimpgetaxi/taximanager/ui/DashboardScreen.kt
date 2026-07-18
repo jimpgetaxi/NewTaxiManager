@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -60,7 +61,10 @@ fun DashboardScreen(
                         onClick = { showExpenseSheet = true },
                         containerColor = NeonPurple,
                         contentColor = Color.White,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        shape = RoundedCornerShape(24.dp),
+                        modifier = Modifier
+                            .padding(bottom = 16.dp)
+                            .neonGlow(NeonPurple, cornerRadius = 24.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.add_expense_btn), 
@@ -72,7 +76,9 @@ fun DashboardScreen(
                     FloatingActionButton(
                         onClick = onNavigateToAddRide,
                         containerColor = NeonYellow,
-                        contentColor = Color.Black
+                        contentColor = Color.Black,
+                        shape = RoundedCornerShape(24.dp),
+                        modifier = Modifier.neonGlow(NeonYellow, cornerRadius = 24.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.add_ride_btn), 
@@ -101,9 +107,19 @@ fun DashboardScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .border(1.dp, if (isShiftActive) NeonPurple else NeonYellow, RoundedCornerShape(12.dp)),
+                    .neonGlow(if (isShiftActive) NeonPurple else NeonYellow, cornerRadius = 24.dp)
+                    .border(
+                        1.dp,
+                        Brush.linearGradient(
+                            listOf(
+                                if (isShiftActive) NeonPurple else NeonYellow,
+                                if (isShiftActive) NeonCyan else NeonPurple
+                            )
+                        ),
+                        RoundedCornerShape(24.dp)
+                    ),
                 colors = ButtonDefaults.buttonColors(containerColor = GlassSurface),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(24.dp)
             ) {
                 Text(
                     text = if (isShiftActive) stringResource(R.string.end_shift_btn) else stringResource(R.string.start_shift_btn),
@@ -116,13 +132,17 @@ fun DashboardScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Cyberpunk Revenue Card
-            Card(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, NeonCyanTranslucent, RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = GlassSurface),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    .neonGlow(NeonCyan, cornerRadius = 24.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(GlassSurface)
+                    .border(
+                        1.dp,
+                        Brush.linearGradient(listOf(NeonCyan, NeonPurple)),
+                        RoundedCornerShape(24.dp)
+                    )
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
@@ -250,9 +270,14 @@ fun DashboardScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
-                            .border(1.dp, NeonPurpleTranslucent, RoundedCornerShape(8.dp))
+                            .neonGlow(NeonPurpleTranslucent, cornerRadius = 24.dp, blurRadius = 8.dp)
+                            .clip(RoundedCornerShape(24.dp))
                             .background(GlassSurface)
+                            .border(
+                                1.dp,
+                                Brush.linearGradient(listOf(NeonPurple, NeonCyan)),
+                                RoundedCornerShape(24.dp)
+                            )
                             .padding(16.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
