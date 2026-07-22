@@ -96,6 +96,9 @@ class MainViewModel @Inject constructor(
     val userName: StateFlow<String> = shiftManager.userNameFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "")
 
+    val onboardingDone: StateFlow<Boolean> = shiftManager.onboardingDoneFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true) // Default true to prevent flash
+
     val liveVehicleCost: StateFlow<Double> = combine(isShiftActive, startOdometer, currentOdometer, costPerKm) { active, start, current, cost ->
         if (active && current > start) {
             val rawCost = (current - start) * cost

@@ -32,15 +32,16 @@ fun HomeScreen(
     val costPerKm by viewModel.costPerKm.collectAsState()
     val recentActivity by viewModel.recentActivity.collectAsState()
     val userName by viewModel.userName.collectAsState()
+    val onboardingDone by viewModel.onboardingDone.collectAsState()
 
     var showExpenseSheet by remember { mutableStateOf(false) }
     var showStartShiftDialog by remember { mutableStateOf(false) }
     var showEndShiftDialog by remember { mutableStateOf(false) }
     var showNameDialog by remember { mutableStateOf(false) }
 
-    // Show name dialog on first launch
-    LaunchedEffect(userName) {
-        if (userName.isEmpty()) {
+    // Show name dialog ONLY on confirmed first launch (onboardingDone = false from DataStore)
+    LaunchedEffect(onboardingDone) {
+        if (!onboardingDone) {
             showNameDialog = true
         }
     }
