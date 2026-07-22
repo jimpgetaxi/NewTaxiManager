@@ -1,6 +1,5 @@
 package com.jimpgetaxi.taximanager.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -11,8 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,6 +19,8 @@ import androidx.compose.ui.unit.sp
 import com.jimpgetaxi.taximanager.R
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.util.Locale
+
+private val FieldShape = RoundedCornerShape(20.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,110 +65,91 @@ fun AddRideScreen(
         ) {
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Header icon
-            Box(
-                modifier = Modifier
-                    .size(64.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Brush.linearGradient(listOf(GradientIncomeStart, GradientIncomeEnd))),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.DirectionsCar,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-
+            // Header
             Text(
                 text = stringResource(R.string.new_ride_title),
                 style = MaterialTheme.typography.titleLarge,
                 color = PositiveGreen,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Συμπλήρωσε τα στοιχεία της κούρσας",
+                style = MaterialTheme.typography.bodyMedium,
+                color = TextTertiary
+            )
+            Spacer(modifier = Modifier.height(28.dp))
 
-            // Amount fields inside glassmorphism card
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .glassmorphism(24.dp)
-                    .padding(16.dp)
-            ) {
-                Column {
-                    // Actual Amount
-                    OutlinedTextField(
-                        value = actualAmount,
-                        onValueChange = { actualAmount = it },
-                        label = { Text(stringResource(R.string.actual_amount_label)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                        modifier = Modifier.fillMaxWidth(),
-                        textStyle = MaterialTheme.typography.headlineLarge.copy(color = TextPrimary),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = PositiveGreen,
-                            unfocusedBorderColor = CardBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary,
-                            focusedLabelColor = PositiveGreen,
-                            unfocusedLabelColor = TextSecondary,
-                            cursorColor = PositiveGreen
-                        )
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Receipt Amount
-                    OutlinedTextField(
-                        value = receiptAmount,
-                        onValueChange = { receiptAmount = it },
-                        label = { Text(stringResource(R.string.receipt_amount_label)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = BrandAccent,
-                            unfocusedBorderColor = CardBorder,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary,
-                            focusedLabelColor = BrandAccent,
-                            unfocusedLabelColor = TextSecondary,
-                            cursorColor = BrandAccent
-                        )
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Odometer (separate card)
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .glassmorphism(24.dp)
-                    .padding(16.dp)
-            ) {
-                OutlinedTextField(
-                    value = currentOdometer,
-                    onValueChange = { currentOdometer = it },
-                    label = { Text(stringResource(R.string.optional_odometer_label)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = GradientShiftStart,
-                        unfocusedBorderColor = CardBorder,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        focusedLabelColor = GradientShiftStart,
-                        unfocusedLabelColor = TextSecondary,
-                        cursorColor = GradientShiftStart
-                    )
+            // Actual Amount
+            OutlinedTextField(
+                value = actualAmount,
+                onValueChange = { actualAmount = it },
+                label = { Text(stringResource(R.string.actual_amount_label)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                modifier = Modifier.fillMaxWidth(),
+                shape = FieldShape,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = PositiveGreen,
+                    unfocusedBorderColor = CardBorder,
+                    focusedTextColor = TextPrimary,
+                    unfocusedTextColor = TextPrimary,
+                    focusedLabelColor = PositiveGreen,
+                    unfocusedLabelColor = TextSecondary,
+                    cursorColor = PositiveGreen,
+                    focusedContainerColor = CardSurface,
+                    unfocusedContainerColor = CardSurface
                 )
-            }
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            // Receipt Amount
+            OutlinedTextField(
+                value = receiptAmount,
+                onValueChange = { receiptAmount = it },
+                label = { Text(stringResource(R.string.receipt_amount_label)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                modifier = Modifier.fillMaxWidth(),
+                shape = FieldShape,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = BrandAccent,
+                    unfocusedBorderColor = CardBorder,
+                    focusedTextColor = TextPrimary,
+                    unfocusedTextColor = TextPrimary,
+                    focusedLabelColor = BrandAccent,
+                    unfocusedLabelColor = TextSecondary,
+                    cursorColor = BrandAccent,
+                    focusedContainerColor = CardSurface,
+                    unfocusedContainerColor = CardSurface
+                )
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            // Odometer
+            OutlinedTextField(
+                value = currentOdometer,
+                onValueChange = { currentOdometer = it },
+                label = { Text(stringResource(R.string.optional_odometer_label)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth(),
+                shape = FieldShape,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = GradientShiftStart,
+                    unfocusedBorderColor = CardBorder,
+                    focusedTextColor = TextPrimary,
+                    unfocusedTextColor = TextPrimary,
+                    focusedLabelColor = GradientShiftStart,
+                    unfocusedLabelColor = TextSecondary,
+                    cursorColor = GradientShiftStart,
+                    focusedContainerColor = CardSurface,
+                    unfocusedContainerColor = CardSurface
+                )
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // VAT Preview Card
+            // VAT Preview
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -185,9 +165,8 @@ fun AddRideScreen(
                 )
                 Text(
                     text = String.format(Locale.US, "%.2f €", estimatedVat),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = NegativeRed,
-                    fontSize = 20.sp
+                    style = MaterialTheme.typography.titleLarge,
+                    color = NegativeRed
                 )
             }
 

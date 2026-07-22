@@ -28,6 +28,8 @@ import androidx.compose.ui.res.stringResource
 import com.jimpgetaxi.taximanager.R
 import com.jimpgetaxi.taximanager.ui.theme.*
 
+private val FieldShape = RoundedCornerShape(20.dp)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddExpenseBottomSheet(
@@ -56,7 +58,7 @@ fun AddExpenseBottomSheet(
         }
     }
 
-    // Determine accent based on category
+    // Dynamic accent based on category
     val isFuelMode = selectedCategory == stringResource(R.string.cat_fuel)
     val accentColor = if (isFuelMode) GradientFuelStart else NegativeRed
     val accentGradient = if (isFuelMode) {
@@ -76,7 +78,7 @@ fun AddExpenseBottomSheet(
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header with icon
+            // Header icon
             Box(
                 modifier = Modifier
                     .size(56.dp)
@@ -101,33 +103,26 @@ fun AddExpenseBottomSheet(
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Amount field with glassmorphism
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .glassmorphism(20.dp)
-                    .padding(4.dp)
-            ) {
-                OutlinedTextField(
-                    value = amount,
-                    onValueChange = { amount = it },
-                    label = { Text(stringResource(R.string.amount_eur)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    modifier = Modifier.fillMaxWidth(),
-                    textStyle = MaterialTheme.typography.headlineLarge.copy(
-                        color = TextPrimary
-                    ),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary,
-                        focusedLabelColor = accentColor,
-                        unfocusedLabelColor = TextSecondary,
-                        cursorColor = accentColor
-                    )
+            // Amount field — rounded with CardSurface fill, no wrapper box
+            OutlinedTextField(
+                value = amount,
+                onValueChange = { amount = it },
+                label = { Text(stringResource(R.string.amount_eur)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                modifier = Modifier.fillMaxWidth(),
+                shape = FieldShape,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = accentColor,
+                    unfocusedBorderColor = CardBorder,
+                    focusedTextColor = TextPrimary,
+                    unfocusedTextColor = TextPrimary,
+                    focusedLabelColor = accentColor,
+                    unfocusedLabelColor = TextSecondary,
+                    cursorColor = accentColor,
+                    focusedContainerColor = CardSurface,
+                    unfocusedContainerColor = CardSurface
                 )
-            }
+            )
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
@@ -187,6 +182,7 @@ fun AddExpenseBottomSheet(
                     onValueChange = { customCategory = it },
                     label = { Text(stringResource(R.string.type_custom_category)) },
                     modifier = Modifier.fillMaxWidth(),
+                    shape = FieldShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = accentColor,
                         unfocusedBorderColor = CardBorder,
@@ -194,7 +190,9 @@ fun AddExpenseBottomSheet(
                         unfocusedTextColor = TextPrimary,
                         focusedLabelColor = accentColor,
                         unfocusedLabelColor = TextSecondary,
-                        cursorColor = accentColor
+                        cursorColor = accentColor,
+                        focusedContainerColor = CardSurface,
+                        unfocusedContainerColor = CardSurface
                     )
                 )
             }
