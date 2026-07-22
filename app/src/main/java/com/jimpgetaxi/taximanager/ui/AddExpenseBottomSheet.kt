@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import com.jimpgetaxi.taximanager.R
+import com.jimpgetaxi.taximanager.ui.components.DateTimePickerRow
 import com.jimpgetaxi.taximanager.ui.theme.*
 
 private val FieldShape = RoundedCornerShape(20.dp)
@@ -34,10 +35,11 @@ private val FieldShape = RoundedCornerShape(20.dp)
 @Composable
 fun AddExpenseBottomSheet(
     onDismiss: () -> Unit,
-    onSave: (amount: String, category: String) -> Unit,
+    onSave: (amount: String, category: String, timestamp: Long) -> Unit,
     defaultCategory: String = ""
 ) {
     var amount by remember { mutableStateOf("") }
+    var timestamp by remember { mutableStateOf(System.currentTimeMillis()) }
     val otherCategoryString = stringResource(R.string.cat_other)
     var selectedCategory by remember { mutableStateOf(defaultCategory) }
     var customCategory by remember { mutableStateOf("") }
@@ -102,6 +104,13 @@ fun AddExpenseBottomSheet(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(24.dp))
+
+            DateTimePickerRow(
+                timestamp = timestamp,
+                onTimestampChanged = { timestamp = it },
+                accentColor = accentColor
+            )
+            Spacer(modifier = Modifier.height(20.dp))
 
             // Amount field — rounded with CardSurface fill, no wrapper box
             OutlinedTextField(
@@ -207,7 +216,7 @@ fun AddExpenseBottomSheet(
                         selectedCategory
                     }
                     if (amount.isNotBlank()) {
-                        onSave(amount, finalCategory)
+                        onSave(amount, finalCategory, timestamp)
                         onDismiss()
                     }
                 },

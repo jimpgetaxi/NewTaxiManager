@@ -185,8 +185,8 @@ fun HomeScreen(
     if (showExpenseSheet) {
         AddExpenseBottomSheet(
             onDismiss = { showExpenseSheet = false },
-            onSave = { amount, category ->
-                viewModel.addExpense(amount, category)
+            onSave = { amount, category, timestamp ->
+                viewModel.addExpense(amount, category, timestamp)
             },
             defaultCategory = expenseDefaultCategory
         )
