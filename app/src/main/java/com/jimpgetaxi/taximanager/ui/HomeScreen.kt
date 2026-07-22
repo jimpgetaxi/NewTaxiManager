@@ -35,6 +35,7 @@ fun HomeScreen(
     val onboardingDone by viewModel.onboardingDone.collectAsState()
 
     var showExpenseSheet by remember { mutableStateOf(false) }
+    var expenseDefaultCategory by remember { mutableStateOf("") }
     var showStartShiftDialog by remember { mutableStateOf(false) }
     var showEndShiftDialog by remember { mutableStateOf(false) }
     var showNameDialog by remember { mutableStateOf(false) }
@@ -122,10 +123,17 @@ fun HomeScreen(
 
         // Quick Actions
         item {
+            val fuelCategoryName = stringResource(R.string.cat_fuel)
             QuickActions(
                 onIncomeClick = onNavigateToAddRide,
-                onExpenseClick = { showExpenseSheet = true },
-                onFuelClick = { showExpenseSheet = true },
+                onExpenseClick = {
+                    expenseDefaultCategory = ""
+                    showExpenseSheet = true
+                },
+                onFuelClick = {
+                    expenseDefaultCategory = fuelCategoryName
+                    showExpenseSheet = true
+                },
                 onShiftClick = {
                     if (isShiftActive) showEndShiftDialog = true
                     else showStartShiftDialog = true
@@ -179,7 +187,8 @@ fun HomeScreen(
             onDismiss = { showExpenseSheet = false },
             onSave = { amount, category ->
                 viewModel.addExpense(amount, category)
-            }
+            },
+            defaultCategory = expenseDefaultCategory
         )
     }
 
