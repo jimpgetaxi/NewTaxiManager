@@ -1,6 +1,7 @@
 package com.jimpgetaxi.taximanager.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -13,7 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.border
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -44,7 +45,6 @@ fun AddExpenseBottomSheet(
         otherCategoryString
     )
     
-    // Set default category on first composition after strings are loaded
     LaunchedEffect(categories.firstOrNull()) {
         if (selectedCategory.isEmpty() && categories.isNotEmpty()) {
             selectedCategory = categories[0]
@@ -53,8 +53,8 @@ fun AddExpenseBottomSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = CyberBackground,
-        scrimColor = CyberBackground.copy(alpha = 0.8f)
+        containerColor = BackgroundDark,
+        scrimColor = BackgroundDark.copy(alpha = 0.8f)
     ) {
         Column(
             modifier = Modifier
@@ -64,7 +64,7 @@ fun AddExpenseBottomSheet(
         ) {
             Text(
                 text = stringResource(R.string.new_expense_title),
-                color = NeonPurple,
+                color = NegativeRed,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 2.sp
@@ -74,19 +74,24 @@ fun AddExpenseBottomSheet(
             OutlinedTextField(
                 value = amount,
                 onValueChange = { amount = it },
-                label = { Text(stringResource(R.string.amount_eur), color = NeonCyan) },
+                label = { Text(stringResource(R.string.amount_eur), color = BrandAccent) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = NeonCyan,
-                    unfocusedBorderColor = NeonCyan.copy(alpha = 0.5f),
-                    focusedTextColor = NeonYellow,
-                    unfocusedTextColor = NeonYellow
+                    focusedBorderColor = BrandAccent,
+                    unfocusedBorderColor = CardBorder,
+                    focusedTextColor = TextPrimary,
+                    unfocusedTextColor = TextPrimary,
+                    cursorColor = BrandAccent
                 )
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(stringResource(R.string.category_label), color = NeonCyan, modifier = Modifier.align(Alignment.Start))
+            Text(
+                stringResource(R.string.category_label),
+                color = BrandAccent,
+                modifier = Modifier.align(Alignment.Start)
+            )
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyVerticalGrid(
@@ -99,23 +104,25 @@ fun AddExpenseBottomSheet(
                     val isSelected = category == selectedCategory
                     Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(if (isSelected) NeonPurple else CyberBackground)
-                            .then(
-                                if (isSelected) Modifier.neonGlow(NeonPurple, cornerRadius = 8.dp, blurRadius = 12.dp)
-                                else Modifier.border(0.5.dp, NeonCyan.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(if (isSelected) BrandAccent else BackgroundDark)
+                            .border(
+                                width = if (isSelected) 0.dp else 1.dp,
+                                color = if (isSelected) Color.Transparent else CardBorder,
+                                shape = RoundedCornerShape(12.dp)
                             )
                             .clickable {
                                 selectedCategory = category
                                 showCustomInput = category == otherCategoryString
                             }
-                            .padding(8.dp),
+                            .padding(10.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = category,
-                            color = if (isSelected) CyberBackground else NeonCyan,
+                            color = if (isSelected) BackgroundDark else TextSecondary,
                             fontSize = 12.sp,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -127,13 +134,14 @@ fun AddExpenseBottomSheet(
                 OutlinedTextField(
                     value = customCategory,
                     onValueChange = { customCategory = it },
-                    label = { Text(stringResource(R.string.type_custom_category), color = NeonCyan) },
+                    label = { Text(stringResource(R.string.type_custom_category), color = BrandAccent) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = NeonCyan,
-                        unfocusedBorderColor = NeonCyan.copy(alpha = 0.5f),
-                        focusedTextColor = NeonYellow,
-                        unfocusedTextColor = NeonYellow
+                        focusedBorderColor = BrandAccent,
+                        unfocusedBorderColor = CardBorder,
+                        focusedTextColor = TextPrimary,
+                        unfocusedTextColor = TextPrimary,
+                        cursorColor = BrandAccent
                     )
                 )
             }
@@ -154,14 +162,13 @@ fun AddExpenseBottomSheet(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
-                    .neonGlow(NeonCyan, cornerRadius = 24.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = NeonCyan),
-                shape = RoundedCornerShape(24.dp)
+                    .height(56.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = NegativeRed),
+                shape = RoundedCornerShape(20.dp)
             ) {
                 Text(
                     text = stringResource(R.string.save_expense_btn),
-                    color = CyberBackground,
+                    color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     letterSpacing = 1.5.sp

@@ -2,6 +2,7 @@ package com.jimpgetaxi.taximanager.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jimpgetaxi.taximanager.data.Expense
 import com.jimpgetaxi.taximanager.data.Ride
 import com.jimpgetaxi.taximanager.data.RideRepository
 import com.jimpgetaxi.taximanager.data.ShiftManager
@@ -17,6 +18,18 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
+
+// === MVI State Definitions ===
+
+data class ActivityItem(
+    val id: Int,
+    val title: String,
+    val subtitle: String,
+    val amount: Double,
+    val isIncome: Boolean,
+    val timestamp: Long,
+    val category: String
+)
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -44,6 +57,11 @@ class MainViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val rides: StateFlow<List<Ride>> = filterTimestampFlow
         .flatMapLatest { since -> repository.getRidesSince(since) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val expenses: StateFlow<List<Expense>> = filterTimestampFlow
+        .flatMapLatest { since -> repository.getExpensesSince(since) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -75,6 +93,9 @@ class MainViewModel @Inject constructor(
     val currentOdometer: StateFlow<Double> = shiftManager.currentOdometerFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.0)
 
+    val userName: StateFlow<String> = shiftManager.userNameFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "")
+
     val liveVehicleCost: StateFlow<Double> = combine(isShiftActive, startOdometer, currentOdometer, costPerKm) { active, start, current, cost ->
         if (active && current > start) {
             val rawCost = (current - start) * cost
@@ -91,6 +112,50 @@ class MainViewModel @Inject constructor(
     val netProfit: StateFlow<Double> = combine(totalRevenue, totalVat, totalExpenses) { rev, vat, exp ->
         rev - vat - exp
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.0)
+
+    // === Combined Activity Feed ===
+    val recentActivity: StateFlow<List<ActivityItem>> = combine(
+        rides,
+        expenses
+    ) { rideList, expenseList ->
+        val rideItems = rideList.map { ride ->
+            ActivityItem(
+                id = ride.id,
+                title = "Κούρσα",
+                subtitle = String.format("%.2f € απόδειξη", ride.receiptAmount),
+                amount = ride.actualAmount,
+                isIncome = true,
+                timestamp = ride.timestamp,
+                category = "ride"
+            )
+        }
+        val expenseItems = expenseList.map { expense ->
+            ActivityItem(
+                id = expense.id + 100000,
+                title = expense.category,
+                subtitle = "",
+                amount = expense.amount,
+                isIncome = false,
+                timestamp = expense.timestamp,
+                category = expense.category.lowercase()
+            )
+        }
+        (rideItems + expenseItems).sortedByDescending { it.timestamp }.take(20)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    // === Mock chart data (will be replaced with real aggregation later) ===
+    val incomeChartData: List<Float> = listOf(120f, 145f, 98f, 167f, 134f, 185f, 156f)
+    val expenseChartData: List<Float> = listOf(35f, 42f, 28f, 55f, 38f, 42f, 30f)
+    val incomeSparkline: List<Float> = listOf(0.3f, 0.5f, 0.4f, 0.7f, 0.6f, 0.9f, 0.8f)
+    val expenseSparkline: List<Float> = listOf(0.4f, 0.5f, 0.3f, 0.6f, 0.4f, 0.5f, 0.35f)
+
+    // === Actions ===
+
+    fun saveUserName(name: String) {
+        viewModelScope.launch {
+            shiftManager.saveUserName(name)
+        }
+    }
 
     fun startShift(odometerStr: String, costStr: String) {
         val odo = odometerStr.replace(",", ".").toDoubleOrNull() ?: return
@@ -114,7 +179,6 @@ class MainViewModel @Inject constructor(
                 shiftManager.endShift()
             }
         } else {
-            // Αν είναι <= 0, απλά κλείνουμε τη βάρδια
             viewModelScope.launch {
                 shiftManager.endShift()
             }

@@ -2,17 +2,33 @@ package com.jimpgetaxi.taximanager.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val NeonYellow = Color(0xFFE0FF00)
-val NeonPurple = Color(0xFFB026FF)
-val NeonCyan = Color(0xFF00F0FF)
+// === ShiftGuard Design System Tokens ===
 
-val CyberBackground = Color(0xFF0D0D12)
-val CyberSurface = Color(0xFF1A1A24)
-val GlassSurface = Color(0x0DFFFFFF) // 5% white for smoked glass
+// Base
+val BackgroundDark = Color(0xFF0B101E)
+val CardSurface = Color(0x1AFFFFFF)
+val CardBorder = Color(0x33FFFFFF)
 
-val NeonCyanTranslucent = Color(0x2600F0FF) // 15% alpha
-val NeonPurpleTranslucent = Color(0x26B026FF)
-val NeonYellowTranslucent = Color(0x26E0FF00)
-
+// Text
 val TextPrimary = Color(0xFFFFFFFF)
-val TextSecondary = Color(0xFFA0A0B0)
+val TextSecondary = Color(0xFF94A3B8)
+val TextTertiary = Color(0xFF64748B)
+
+// Accents
+val PositiveGreen = Color(0xFF10B981)
+val NegativeRed = Color(0xFFEF4444)
+val BrandAccent = Color(0xFF38BDF8)
+
+// Gradient Colors
+val GradientIncomeStart = Color(0xFF10B981)
+val GradientIncomeEnd = Color(0xFF059669)
+val GradientExpenseStart = Color(0xFFEF4444)
+val GradientExpenseEnd = Color(0xFFDC2626)
+val GradientFuelStart = Color(0xFFF59E0B)
+val GradientFuelEnd = Color(0xFFD97706)
+val GradientShiftStart = Color(0xFF3B82F6)
+val GradientShiftEnd = Color(0xFF2563EB)
+
+// Ambient Glows
+val GlowTeal = Color(0x552DD4BF)
+val GlowPurple = Color(0x55A855F7)

@@ -1,15 +1,11 @@
 package com.jimpgetaxi.taximanager.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,7 +16,6 @@ import com.jimpgetaxi.taximanager.R
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartShiftDialog(
     initialCostPerKm: Double,
@@ -31,23 +26,20 @@ fun StartShiftDialog(
     var cost by remember { mutableStateOf(initialCostPerKm.toString()) }
 
     Dialog(onDismissRequest = onDismiss) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .neonGlow(NeonYellowTranslucent, cornerRadius = 24.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(GlassSurface)
-                .border(
-                    0.5.dp,
-                    Brush.linearGradient(listOf(NeonYellow.copy(alpha=0.5f), Color.Transparent)),
-                    RoundedCornerShape(24.dp)
-                )
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(28.dp),
+            color = BackgroundDark
         ) {
-            Column(modifier = Modifier.padding(24.dp)) {
+            Column(
+                modifier = Modifier
+                    .glassmorphism(28.dp)
+                    .padding(24.dp)
+            ) {
                 Text(
                     text = stringResource(R.string.start_shift_title),
-                    color = NeonYellow,
                     style = MaterialTheme.typography.titleLarge,
+                    color = PositiveGreen,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -58,10 +50,11 @@ fun StartShiftDialog(
                     label = { Text(stringResource(R.string.shift_start_odo_label), color = TextSecondary) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = NeonYellow,
-                        unfocusedBorderColor = NeonYellow.copy(alpha = 0.5f),
+                        focusedBorderColor = PositiveGreen,
+                        unfocusedBorderColor = CardBorder,
                         focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
+                        unfocusedTextColor = TextPrimary,
+                        cursorColor = PositiveGreen
                     ),
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -73,10 +66,11 @@ fun StartShiftDialog(
                     label = { Text(stringResource(R.string.shift_cost_km_label), color = TextSecondary) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = NeonYellow,
-                        unfocusedBorderColor = NeonYellow.copy(alpha = 0.5f),
+                        focusedBorderColor = PositiveGreen,
+                        unfocusedBorderColor = CardBorder,
                         focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
+                        unfocusedTextColor = TextPrimary,
+                        cursorColor = PositiveGreen
                     ),
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -96,11 +90,14 @@ fun StartShiftDialog(
                                 onConfirm(odo, cost)
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = NeonYellow),
-                        shape = RoundedCornerShape(24.dp),
-                        modifier = Modifier.neonGlow(NeonYellow, cornerRadius = 24.dp)
+                        colors = ButtonDefaults.buttonColors(containerColor = PositiveGreen),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
-                        Text(stringResource(R.string.confirm_btn), color = CyberBackground, fontWeight = FontWeight.Bold)
+                        Text(
+                            stringResource(R.string.confirm_btn),
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
@@ -108,7 +105,6 @@ fun StartShiftDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EndShiftDialog(
     startOdo: Double,
@@ -123,23 +119,20 @@ fun EndShiftDialog(
     val estimatedCost = distance * costPerKm
 
     Dialog(onDismissRequest = onDismiss) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .neonGlow(NeonPurpleTranslucent, cornerRadius = 24.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(GlassSurface)
-                .border(
-                    0.5.dp,
-                    Brush.linearGradient(listOf(NeonPurple.copy(alpha=0.5f), Color.Transparent)),
-                    RoundedCornerShape(24.dp)
-                )
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(28.dp),
+            color = BackgroundDark
         ) {
-            Column(modifier = Modifier.padding(24.dp)) {
+            Column(
+                modifier = Modifier
+                    .glassmorphism(28.dp)
+                    .padding(24.dp)
+            ) {
                 Text(
                     text = stringResource(R.string.end_shift_title),
-                    color = NeonPurple,
                     style = MaterialTheme.typography.titleLarge,
+                    color = NegativeRed,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -150,29 +143,32 @@ fun EndShiftDialog(
                     label = { Text(stringResource(R.string.shift_end_odo_label), color = TextSecondary) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = NeonPurple,
-                        unfocusedBorderColor = NeonPurple.copy(alpha = 0.5f),
+                        focusedBorderColor = NegativeRed,
+                        unfocusedBorderColor = CardBorder,
                         focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
+                        unfocusedTextColor = TextPrimary,
+                        cursorColor = NegativeRed
                     ),
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(CyberBackground)
-                        .padding(12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    color = CardSurface
                 ) {
-                    Text(stringResource(R.string.estimated_cost_label), color = TextSecondary)
-                    Text(
-                        text = String.format(Locale.US, "%.2f €", estimatedCost),
-                        color = NeonPurple,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(stringResource(R.string.estimated_cost_label), color = TextSecondary)
+                        Text(
+                            text = String.format(Locale.US, "%.2f €", estimatedCost),
+                            color = NegativeRed,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -190,11 +186,14 @@ fun EndShiftDialog(
                                 onConfirm(endOdoStr)
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = NeonPurple),
-                        shape = RoundedCornerShape(24.dp),
-                        modifier = Modifier.neonGlow(NeonPurple, cornerRadius = 24.dp)
+                        colors = ButtonDefaults.buttonColors(containerColor = NegativeRed),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
-                        Text(stringResource(R.string.confirm_btn), color = CyberBackground, fontWeight = FontWeight.Bold)
+                        Text(
+                            stringResource(R.string.confirm_btn),
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }

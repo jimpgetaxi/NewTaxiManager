@@ -1,6 +1,5 @@
 package com.jimpgetaxi.taximanager.ui
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,14 +8,11 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.background
 import com.jimpgetaxi.taximanager.R
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.util.Locale
@@ -38,24 +34,24 @@ fun AddRideScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.new_ride_title), color = NeonCyan) },
+                title = { Text(stringResource(R.string.new_ride_title), color = BrandAccent) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = NeonCyan)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = BrandAccent)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = CyberBackground
+                    containerColor = Color.Transparent
                 )
             )
         },
-        containerColor = CyberBackground
+        containerColor = BackgroundDark
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(20.dp)
         ) {
             OutlinedTextField(
                 value = actualAmount,
@@ -64,12 +60,13 @@ fun AddRideScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = NeonYellow,
-                    unfocusedBorderColor = TextSecondary,
+                    focusedBorderColor = PositiveGreen,
+                    unfocusedBorderColor = CardBorder,
                     focusedTextColor = TextPrimary,
                     unfocusedTextColor = TextPrimary,
-                    focusedLabelColor = NeonYellow,
-                    unfocusedLabelColor = TextSecondary
+                    focusedLabelColor = PositiveGreen,
+                    unfocusedLabelColor = TextSecondary,
+                    cursorColor = PositiveGreen
                 )
             )
 
@@ -82,12 +79,13 @@ fun AddRideScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = NeonCyan,
-                    unfocusedBorderColor = TextSecondary,
+                    focusedBorderColor = BrandAccent,
+                    unfocusedBorderColor = CardBorder,
                     focusedTextColor = TextPrimary,
                     unfocusedTextColor = TextPrimary,
-                    focusedLabelColor = NeonCyan,
-                    unfocusedLabelColor = TextSecondary
+                    focusedLabelColor = BrandAccent,
+                    unfocusedLabelColor = TextSecondary,
+                    cursorColor = BrandAccent
                 )
             )
 
@@ -100,43 +98,36 @@ fun AddRideScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = NeonPurple,
-                    unfocusedBorderColor = TextSecondary,
+                    focusedBorderColor = GradientShiftStart,
+                    unfocusedBorderColor = CardBorder,
                     focusedTextColor = TextPrimary,
                     unfocusedTextColor = TextPrimary,
-                    focusedLabelColor = NeonPurple,
-                    unfocusedLabelColor = TextSecondary
+                    focusedLabelColor = GradientShiftStart,
+                    unfocusedLabelColor = TextSecondary,
+                    cursorColor = GradientShiftStart
                 )
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .neonGlow(NeonCyanTranslucent, cornerRadius = 24.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(GlassSurface)
-                    .border(
-                        0.5.dp,
-                        Brush.linearGradient(listOf(NeonCyan.copy(alpha=0.5f), Color.Transparent, NeonPurple.copy(alpha=0.5f))),
-                        RoundedCornerShape(24.dp)
-                    )
+            // VAT Preview Card
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                color = CardSurface
             ) {
-                PaddingValues(16.dp).let {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(stringResource(R.string.vat_label), color = TextSecondary)
-                        Text(
-                            text = String.format(Locale.US, "%.2f €", estimatedVat),
-                            color = NeonPurple,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                Row(
+                    modifier = Modifier
+                        .glassmorphism(20.dp)
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(stringResource(R.string.vat_label), color = TextSecondary)
+                    Text(
+                        text = String.format(Locale.US, "%.2f €", estimatedVat),
+                        color = NegativeRed,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
 
@@ -151,15 +142,14 @@ fun AddRideScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
-                    .neonGlow(NeonYellow, cornerRadius = 24.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = NeonYellow),
-                shape = RoundedCornerShape(24.dp)
+                    .height(56.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = PositiveGreen),
+                shape = RoundedCornerShape(20.dp)
             ) {
                 Text(
                     text = stringResource(R.string.save_ride_btn),
-                    color = Color.Black,
-                    fontWeight = FontWeight.Black
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }

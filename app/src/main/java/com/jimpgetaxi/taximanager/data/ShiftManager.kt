@@ -21,6 +21,7 @@ class ShiftManager @Inject constructor(@ApplicationContext private val context: 
         val COST_PER_KM = doublePreferencesKey("cost_per_km")
         val SHIFT_START_TIME = longPreferencesKey("shift_start_time")
         val CURRENT_ODOMETER = doublePreferencesKey("current_odometer")
+        val USER_NAME = stringPreferencesKey("user_name")
     }
 
     val isShiftActiveFlow: Flow<Boolean> = context.dataStore.data.map { prefs ->
@@ -43,6 +44,10 @@ class ShiftManager @Inject constructor(@ApplicationContext private val context: 
         prefs[CURRENT_ODOMETER] ?: 0.0
     }
 
+    val userNameFlow: Flow<String> = context.dataStore.data.map { prefs ->
+        prefs[USER_NAME] ?: ""
+    }
+
     suspend fun startShift(startOdometer: Double, costPerKm: Double) {
         context.dataStore.edit { prefs ->
             prefs[IS_SHIFT_ACTIVE] = true
@@ -63,6 +68,12 @@ class ShiftManager @Inject constructor(@ApplicationContext private val context: 
         context.dataStore.edit { prefs ->
             prefs[IS_SHIFT_ACTIVE] = false
             // We intentionally do not clear COST_PER_KM so the app remembers the last used value!
+        }
+    }
+
+    suspend fun saveUserName(name: String) {
+        context.dataStore.edit { prefs ->
+            prefs[USER_NAME] = name
         }
     }
 }
