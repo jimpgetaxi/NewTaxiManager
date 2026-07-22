@@ -16,6 +16,8 @@ import com.jimpgetaxi.taximanager.R
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.util.Locale
 
+private val FieldShape = RoundedCornerShape(20.dp)
+
 @Composable
 fun StartShiftDialog(
     initialCostPerKm: Double,
@@ -42,37 +44,53 @@ fun StartShiftDialog(
                     color = PositiveGreen,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Συμπλήρωσε τα στοιχεία εκκίνησης",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextTertiary
+                )
+                Spacer(modifier = Modifier.height(20.dp))
 
                 OutlinedTextField(
                     value = odo,
                     onValueChange = { odo = it },
-                    label = { Text(stringResource(R.string.shift_start_odo_label), color = TextSecondary) },
+                    label = { Text(stringResource(R.string.shift_start_odo_label)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = FieldShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = PositiveGreen,
                         unfocusedBorderColor = CardBorder,
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary,
-                        cursorColor = PositiveGreen
-                    ),
-                    modifier = Modifier.fillMaxWidth()
+                        focusedLabelColor = PositiveGreen,
+                        unfocusedLabelColor = TextSecondary,
+                        cursorColor = PositiveGreen,
+                        focusedContainerColor = CardSurface,
+                        unfocusedContainerColor = CardSurface
+                    )
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
                 OutlinedTextField(
                     value = cost,
                     onValueChange = { cost = it },
-                    label = { Text(stringResource(R.string.shift_cost_km_label), color = TextSecondary) },
+                    label = { Text(stringResource(R.string.shift_cost_km_label)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = FieldShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = PositiveGreen,
                         unfocusedBorderColor = CardBorder,
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary,
-                        cursorColor = PositiveGreen
-                    ),
-                    modifier = Modifier.fillMaxWidth()
+                        focusedLabelColor = PositiveGreen,
+                        unfocusedLabelColor = TextSecondary,
+                        cursorColor = PositiveGreen,
+                        focusedContainerColor = CardSurface,
+                        unfocusedContainerColor = CardSurface
+                    )
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -135,40 +153,53 @@ fun EndShiftDialog(
                     color = NegativeRed,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Συμπλήρωσε τον τελικό χιλιομετρητή",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = TextTertiary
+                )
+                Spacer(modifier = Modifier.height(20.dp))
 
                 OutlinedTextField(
                     value = endOdoStr,
                     onValueChange = { endOdoStr = it },
-                    label = { Text(stringResource(R.string.shift_end_odo_label), color = TextSecondary) },
+                    label = { Text(stringResource(R.string.shift_end_odo_label)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = FieldShape,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = NegativeRed,
                         unfocusedBorderColor = CardBorder,
                         focusedTextColor = TextPrimary,
                         unfocusedTextColor = TextPrimary,
-                        cursorColor = NegativeRed
-                    ),
-                    modifier = Modifier.fillMaxWidth()
+                        focusedLabelColor = NegativeRed,
+                        unfocusedLabelColor = TextSecondary,
+                        cursorColor = NegativeRed,
+                        focusedContainerColor = CardSurface,
+                        unfocusedContainerColor = CardSurface
+                    )
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    color = CardSurface
+                // Estimated Cost Preview
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .glassmorphism(16.dp)
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(
-                        modifier = Modifier.padding(12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(stringResource(R.string.estimated_cost_label), color = TextSecondary)
-                        Text(
-                            text = String.format(Locale.US, "%.2f €", estimatedCost),
-                            color = NegativeRed,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+                    Text(
+                        stringResource(R.string.estimated_cost_label),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = TextSecondary
+                    )
+                    Text(
+                        text = String.format(Locale.US, "%.2f €", estimatedCost),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = NegativeRed
+                    )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
 
