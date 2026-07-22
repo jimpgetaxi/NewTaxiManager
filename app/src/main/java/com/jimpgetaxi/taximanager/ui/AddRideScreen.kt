@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jimpgetaxi.taximanager.R
+import com.jimpgetaxi.taximanager.ui.components.DateTimePickerRow
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.util.Locale
 
@@ -31,6 +32,7 @@ fun AddRideScreen(
     var actualAmount by remember { mutableStateOf("") }
     var receiptAmount by remember { mutableStateOf("") }
     var currentOdometer by remember { mutableStateOf("") }
+    var timestamp by remember { mutableStateOf(System.currentTimeMillis()) }
 
     // Live VAT calculation
     val receiptVal = receiptAmount.replace(",", ".").toDoubleOrNull() ?: 0.0
@@ -79,6 +81,13 @@ fun AddRideScreen(
                 color = TextTertiary
             )
             Spacer(modifier = Modifier.height(28.dp))
+
+            DateTimePickerRow(
+                timestamp = timestamp,
+                onTimestampChanged = { timestamp = it },
+                accentColor = PositiveGreen
+            )
+            Spacer(modifier = Modifier.height(20.dp))
 
             // Actual Amount
             OutlinedTextField(
@@ -176,7 +185,7 @@ fun AddRideScreen(
             Button(
                 onClick = {
                     if (actualAmount.isNotBlank() && receiptAmount.isNotBlank()) {
-                        viewModel.addRide(actualAmount, receiptAmount, currentOdometer)
+                        viewModel.addRide(actualAmount, receiptAmount, currentOdometer, timestamp)
                         onBack()
                     }
                 },

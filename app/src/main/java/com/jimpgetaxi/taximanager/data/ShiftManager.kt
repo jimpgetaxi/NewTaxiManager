@@ -53,12 +53,12 @@ class ShiftManager @Inject constructor(@ApplicationContext private val context: 
         prefs[ONBOARDING_DONE] ?: false
     }
 
-    suspend fun startShift(startOdometer: Double, costPerKm: Double) {
+    suspend fun startShift(startOdometer: Double, costPerKm: Double, timestamp: Long = System.currentTimeMillis()) {
         context.dataStore.edit { prefs ->
             prefs[IS_SHIFT_ACTIVE] = true
             prefs[START_ODOMETER] = startOdometer
             prefs[COST_PER_KM] = costPerKm
-            prefs[SHIFT_START_TIME] = System.currentTimeMillis()
+            prefs[SHIFT_START_TIME] = timestamp
             prefs[CURRENT_ODOMETER] = startOdometer
         }
     }

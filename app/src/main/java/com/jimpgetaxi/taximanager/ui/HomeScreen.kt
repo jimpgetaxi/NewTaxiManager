@@ -196,8 +196,8 @@ fun HomeScreen(
         StartShiftDialog(
             initialCostPerKm = costPerKm,
             onDismiss = { showStartShiftDialog = false },
-            onConfirm = { odo, cost ->
-                viewModel.startShift(odo, cost)
+            onConfirm = { odo, cost, timestamp ->
+                viewModel.startShift(odo, cost, timestamp)
                 showStartShiftDialog = false
             }
         )
@@ -209,8 +209,8 @@ fun HomeScreen(
             startOdo = startOdometer,
             costPerKm = costPerKm,
             onDismiss = { showEndShiftDialog = false },
-            onConfirm = { endOdo ->
-                viewModel.endShift(endOdo, expenseCategoryName)
+            onConfirm = { endOdo, timestamp ->
+                viewModel.endShift(endOdo, expenseCategoryName, timestamp)
                 showEndShiftDialog = false
             }
         )

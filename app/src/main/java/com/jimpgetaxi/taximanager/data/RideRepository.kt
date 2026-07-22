@@ -22,22 +22,24 @@ class RideRepository @Inject constructor(
     fun getTotalExpensesSince(since: Long): Flow<Double?> = expenseDao.getTotalExpensesSince(since)
     fun getExpensesSince(since: Long): Flow<List<Expense>> = expenseDao.getExpensesSince(since)
 
-    suspend fun insertRide(actualAmount: Double, receiptAmount: Double) {
+    suspend fun insertRide(actualAmount: Double, receiptAmount: Double, timestamp: Long = System.currentTimeMillis()) {
         // Υπολογισμός ΦΠΑ (13%) βάσει της απόδειξης
         val vatAmount = (receiptAmount / 1.13) * 0.13
         
         val ride = Ride(
             actualAmount = actualAmount,
             receiptAmount = receiptAmount,
-            vatAmount = vatAmount
+            vatAmount = vatAmount,
+            timestamp = timestamp
         )
         dao.insertRide(ride)
     }
 
-    suspend fun insertExpense(amount: Double, category: String) {
+    suspend fun insertExpense(amount: Double, category: String, timestamp: Long = System.currentTimeMillis()) {
         val expense = Expense(
             amount = amount,
-            category = category
+            category = category,
+            timestamp = timestamp
         )
         expenseDao.insertExpense(expense)
     }

@@ -160,15 +160,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun startShift(odometerStr: String, costStr: String) {
+    fun startShift(odometerStr: String, costStr: String, timestamp: Long = System.currentTimeMillis()) {
         val odo = odometerStr.replace(",", ".").toDoubleOrNull() ?: return
         val cost = costStr.replace(",", ".").toDoubleOrNull() ?: return
         viewModelScope.launch {
-            shiftManager.startShift(odo, cost)
+            shiftManager.startShift(odo, cost, timestamp)
         }
     }
 
-    fun endShift(endOdometerStr: String, expenseCategoryName: String) {
+    fun endShift(endOdometerStr: String, expenseCategoryName: String, timestamp: Long = System.currentTimeMillis()) {
         val endOdo = endOdometerStr.replace(",", ".").toDoubleOrNull() ?: return
         val startOdo = startOdometer.value
         val costKm = costPerKm.value
@@ -178,7 +178,7 @@ class MainViewModel @Inject constructor(
             val rawCost = distance * costKm
             val totalCost = kotlin.math.round(rawCost * 10) / 10.0
             viewModelScope.launch {
-                repository.insertExpense(totalCost, expenseCategoryName)
+                repository.insertExpense(totalCost, expenseCategoryName, timestamp)
                 shiftManager.endShift()
             }
         } else {
@@ -188,24 +188,24 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun addRide(actualStr: String, receiptStr: String, odometerStr: String) {
+    fun addRide(actualStr: String, receiptStr: String, odometerStr: String, timestamp: Long = System.currentTimeMillis()) {
         val actual = actualStr.replace(",", ".").toDoubleOrNull() ?: return
         val receipt = receiptStr.replace(",", ".").toDoubleOrNull() ?: return
         val odo = odometerStr.replace(",", ".").toDoubleOrNull()
         
         viewModelScope.launch {
-            repository.insertRide(actual, receipt)
+            repository.insertRide(actual, receipt, timestamp)
             if (odo != null) {
                 shiftManager.updateCurrentOdometer(odo)
             }
         }
     }
 
-    fun addExpense(amountStr: String, category: String) {
+    fun addExpense(amountStr: String, category: String, timestamp: Long = System.currentTimeMillis()) {
         val amount = amountStr.replace(",", ".").toDoubleOrNull() ?: return
         
         viewModelScope.launch {
-            repository.insertExpense(amount, category)
+            repository.insertExpense(amount, category, timestamp)
         }
     }
 }

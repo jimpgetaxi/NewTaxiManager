@@ -13,6 +13,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.jimpgetaxi.taximanager.R
+import com.jimpgetaxi.taximanager.ui.components.DateTimePickerRow
 import com.jimpgetaxi.taximanager.ui.theme.*
 import java.util.Locale
 
@@ -22,10 +23,11 @@ private val FieldShape = RoundedCornerShape(20.dp)
 fun StartShiftDialog(
     initialCostPerKm: Double,
     onDismiss: () -> Unit,
-    onConfirm: (odometer: String, costPerKm: String) -> Unit
+    onConfirm: (odometer: String, costPerKm: String, timestamp: Long) -> Unit
 ) {
     var odo by remember { mutableStateOf("") }
     var cost by remember { mutableStateOf(initialCostPerKm.toString()) }
+    var timestamp by remember { mutableStateOf(System.currentTimeMillis()) }
 
     Dialog(onDismissRequest = onDismiss) {
         Surface(
@@ -49,6 +51,13 @@ fun StartShiftDialog(
                     text = "Συμπλήρωσε τα στοιχεία εκκίνησης",
                     style = MaterialTheme.typography.bodyMedium,
                     color = TextTertiary
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+
+                DateTimePickerRow(
+                    timestamp = timestamp,
+                    onTimestampChanged = { timestamp = it },
+                    accentColor = PositiveGreen
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -105,7 +114,7 @@ fun StartShiftDialog(
                     Button(
                         onClick = {
                             if (odo.isNotBlank() && cost.isNotBlank()) {
-                                onConfirm(odo, cost)
+                                onConfirm(odo, cost, timestamp)
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = PositiveGreen),
@@ -128,9 +137,10 @@ fun EndShiftDialog(
     startOdo: Double,
     costPerKm: Double,
     onDismiss: () -> Unit,
-    onConfirm: (endOdometer: String) -> Unit
+    onConfirm: (endOdometer: String, timestamp: Long) -> Unit
 ) {
     var endOdoStr by remember { mutableStateOf("") }
+    var timestamp by remember { mutableStateOf(System.currentTimeMillis()) }
     
     val endOdo = endOdoStr.replace(",", ".").toDoubleOrNull() ?: 0.0
     val distance = if (endOdo > startOdo) endOdo - startOdo else 0.0
@@ -158,6 +168,13 @@ fun EndShiftDialog(
                     text = "Συμπλήρωσε τον τελικό χιλιομετρητή",
                     style = MaterialTheme.typography.bodyMedium,
                     color = TextTertiary
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+
+                DateTimePickerRow(
+                    timestamp = timestamp,
+                    onTimestampChanged = { timestamp = it },
+                    accentColor = NegativeRed
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -214,7 +231,7 @@ fun EndShiftDialog(
                     Button(
                         onClick = {
                             if (endOdoStr.isNotBlank()) {
-                                onConfirm(endOdoStr)
+                                onConfirm(endOdoStr, timestamp)
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = NegativeRed),
