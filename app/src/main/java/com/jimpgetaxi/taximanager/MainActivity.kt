@@ -21,6 +21,7 @@ import androidx.navigation.navArgument
 import com.jimpgetaxi.taximanager.ui.AddRideScreen
 import com.jimpgetaxi.taximanager.ui.HistoryScreen
 import com.jimpgetaxi.taximanager.ui.HomeScreen
+import com.jimpgetaxi.taximanager.ui.SplashScreen
 import com.jimpgetaxi.taximanager.ui.MainViewModel
 import com.jimpgetaxi.taximanager.ui.PlaceholderScreen
 import com.jimpgetaxi.taximanager.ui.ShiftDetailScreen
@@ -46,11 +47,16 @@ class MainActivity : ComponentActivity() {
 
                 val selectedTab = mainTabs.indexOf(currentRoute).coerceAtLeast(0)
 
+                var showSplash by remember { mutableStateOf(true) }
+
                 Box(modifier = Modifier.fillMaxSize()) {
                     // Ambient gradient background
                     AmbientBackground()
 
-                    Scaffold(
+                    if (showSplash) {
+                        SplashScreen { showSplash = false }
+                    } else {
+                        Scaffold(
                         containerColor = Color.Transparent,
                         bottomBar = {
                             if (showBottomBar) {
@@ -119,4 +125,5 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
 }
