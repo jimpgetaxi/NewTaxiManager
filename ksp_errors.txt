@@ -1,0 +1,95 @@
+
+  build_debug.log:138:2026-07-23T14:34:07.877+0300 [DEBUG] [org.gradle.launcher.daemon.registry.PersistentDaemonRegistry] Removing daemon address: [e92fdf7f-8842-4649-b81d-c8e12d3862bb port:57867, addresses:[/127.0.0.1]]
+  build_debug.log:139:2026-07-23T14:34:07.877+0300 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Waiting to acquire exclusive lock on daemon addresses registry.
+  build_debug.log:140:2026-07-23T14:34:07.878+0300 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Lock acquired on daemon addresses registry.
+  build_debug.log:141:2026-07-23T14:34:07.880+0300 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Releasing lock on daemon addresses registry.
+  build_debug.log:142:2026-07-23T14:34:07.880+0300 [DEBUG] [org.gradle.launcher.daemon.client.DefaultDaemonConnector] Cannot connect to daemon DaemonInfo{pid=16700, address=[e92fdf7f-8842-4649-b81d-c8e12d3862bb port:57867, addresses:[/127.0.0.1]], state=Idle, lastBusy=1784806385005, context=DefaultDaemonContext[uid=270aa63d-f7a0-4a01-a57d-354eb42d5f3a,javaHome=C:\Program Files\Eclipse Adoptium\jdk-21.0.11.10-hotspot,javaVersion=21,daemonRegistryDir=C:\Users\jimpg\.gradle\daemon,pid=16700,idleTimeout=10800000,priority=NORMAL,applyInstrumentationAgent=true,nativeServicesMode=ENABLED,daemonOpts=--add-opens=java.base/java.util=ALL-UNNAMED,--add-opens=java.base/java.lang=ALL-UNNAMED,--add-opens=java.base/java.lang.invoke=ALL-UNNAMED,--add-opens=java.prefs/java.util.prefs=ALL-UNNAMED,--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED,--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED,--add-opens=java.base/java.nio.charset=ALL-UNNAMED,--add-opens=java.base/java.net=ALL-UNNAMED,--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED,-Xmx2048m,-Dfile.encoding=UTF-8,-Duser.country=GR,-Duser.language=el,-Duser.variant]} due to {}. Trying a different daemon...
+> build_debug.log:143:org.gradle.internal.remote.internal.ConnectException: Could not connect to server [e92fdf7f-8842-4649-b81d-c8e12d3862bb port:57867, addresses:[/127.0.0.1]]. Tried addresses: [/127.0.0.1].
+  build_debug.log:144:	at org.gradle.internal.remote.internal.inet.TcpOutgoingConnector.connect(TcpOutgoingConnector.java:67)
+  build_debug.log:145:	at org.gradle.launcher.daemon.client.DefaultDaemonConnector.connectToDaemon(DefaultDaemonConnector.java:274)
+  build_debug.log:146:	at org.gradle.launcher.daemon.client.DefaultDaemonConnector.findConnection(DefaultDaemonConnector.java:206)
+  build_debug.log:147:	at org.gradle.launcher.daemon.client.DefaultDaemonConnector.connectToIdleDaemon(DefaultDaemonConnector.java:158)
+  build_debug.log:148:	at org.gradle.launcher.daemon.client.DefaultDaemonConnector.connect(DefaultDaemonConnector.java:125)
+  build_debug.log:156:	at org.gradle.launcher.cli.DebugLoggerWarningAction.execute(DebugLoggerWarningAction.java:30)
+  build_debug.log:157:	at org.gradle.launcher.cli.WelcomeMessageAction.execute(WelcomeMessageAction.java:96)
+  build_debug.log:158:	at org.gradle.launcher.cli.WelcomeMessageAction.execute(WelcomeMessageAction.java:40)
+  build_debug.log:159:	at org.gradle.launcher.cli.NativeServicesInitializingAction.execute(NativeServicesInitializingAction.java:50)
+  build_debug.log:160:	at org.gradle.launcher.cli.NativeServicesInitializingAction.execute(NativeServicesInitializingAction.java:27)
+> build_debug.log:161:	at org.gradle.launcher.cli.ExceptionReportingAction.execute(ExceptionReportingAction.java:41)
+> build_debug.log:162:	at org.gradle.launcher.cli.ExceptionReportingAction.execute(ExceptionReportingAction.java:26)
+  build_debug.log:163:	at org.gradle.launcher.cli.DefaultCommandLineActionFactory$WithLogging.execute(DefaultCommandLineActionFactory.java:445)
+  build_debug.log:164:	at org.gradle.launcher.Main.doAction(Main.java:35)
+  build_debug.log:165:	at org.gradle.launcher.bootstrap.EntryPoint.run(EntryPoint.java:52)
+  build_debug.log:166:	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+  build_debug.log:167:	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+  build_debug.log:169:	at org.gradle.launcher.bootstrap.ProcessBootstrap.run(ProcessBootstrap.java:37)
+  build_debug.log:170:	at org.gradle.launcher.GradleMain.main(GradleMain.java:31)
+  build_debug.log:171:	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+  build_debug.log:172:	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+  build_debug.log:173:	at org.gradle.wrapper.GradleWrapperMain.main(SourceFile:70)
+> build_debug.log:174:Caused by: java.net.ConnectException: Connection refused: getsockopt
+  build_debug.log:175:	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+  build_debug.log:176:	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:694)
+  build_debug.log:177:	at java.base/sun.nio.ch.SocketChannelImpl.finishTimedConnect(SocketChannelImpl.java:1194)
+  build_debug.log:178:	at java.base/sun.nio.ch.SocketChannelImpl.blockingConnect(SocketChannelImpl.java:1236)
+  build_debug.log:179:	at java.base/sun.nio.ch.SocketAdaptor.connect(SocketAdaptor.java:102)
+  build_debug.log:41457:2026-07-23T14:34:22.729+0300 [DEBUG] [sun.rmi.loader] WorkerExecutor Queue Thread 3: name = "java.lang.Integer", codebase = "", defaultLoader = InstrumentingVisitableURLClassLoader(ClassLoaderScopeIdentifier.Id{coreAndPlugins:settings[:]:buildSrc[:]:root-project[:](export)})
+  build_debug.log:41458:2026-07-23T14:34:22.729+0300 [DEBUG] [sun.rmi.loader] WorkerExecutor Queue Thread 3: name = "java.lang.Number", codebase = "", defaultLoader = InstrumentingVisitableURLClassLoader(ClassLoaderScopeIdentifier.Id{coreAndPlugins:settings[:]:buildSrc[:]:root-project[:](export)})
+  build_debug.log:41459:2026-07-23T14:34:22.729+0300 [DEBUG] [sun.rmi.client.ref] WorkerExecutor Queue Thread 3: free connection (reuse = true)
+  build_debug.log:41460:2026-07-23T14:34:22.730+0300 [DEBUG] [sun.rmi.transport.tcp] WorkerExecutor Queue Thread 3: reuse connection
+  build_debug.log:41461:2026-07-23T14:34:22.730+0300 [DEBUG] [org.gradle.api.Task] v: Using Kotlin home directory <no_path>
+> build_debug.log:41462:2026-07-23T14:34:22.730+0300 [DEBUG] [org.gradle.api.Task] v: Exception on loading scripting plugin: java.lang.ClassNotFoundException: org.jetbrains.kotlin.scripting.compiler.plugin.ScriptingCompilerConfigurationComponentRegistrar
+  build_debug.log:41463:2026-07-23T14:34:22.730+0300 [DEBUG] [org.gradle.api.Task] v: Scripting plugin will not be loaded: not all required jars are present in the classpath (missing files: [.\kotlin-scripting-compiler.jar, .\kotlin-scripting-compiler-impl.jar, .\kotlin-scripting-common.jar, .\kotlin-scripting-jvm.jar])
+  build_debug.log:41464:2026-07-23T14:34:22.730+0300 [DEBUG] [org.gradle.api.Task] v: Using JVM IR backend
+  build_debug.log:41465:2026-07-23T14:34:22.730+0300 [DEBUG] [org.gradle.api.Task] v: Configuring the compilation environment
+> build_debug.log:41466:2026-07-23T14:34:22.730+0300 [ERROR] [org.gradle.api.Task] e: java.lang.IllegalStateException: Storage for [C:\Users\jimpg\Documents\projects\TaxiManager\app\build\kspCaches\debug\symbolLookups\id-to-file.tab] is already registered
+  build_debug.log:41467:	at org.jetbrains.kotlin.com.intellij.util.io.FilePageCache.registerPagedFileStorage(FilePageCache.java:410)
+  build_debug.log:41468:	at org.jetbrains.kotlin.com.intellij.util.io.PagedFileStorage.<init>(PagedFileStorage.java:72)
+  build_debug.log:41469:	at org.jetbrains.kotlin.com.intellij.util.io.ResizeableMappedFile.<init>(ResizeableMappedFile.java:55)
+  build_debug.log:41470:	at org.jetbrains.kotlin.com.intellij.util.io.PersistentBTreeEnumerator.<init>(PersistentBTreeEnumerator.java:128)
+  build_debug.log:41471:	at org.jetbrains.kotlin.com.intellij.util.io.PersistentEnumerator.createDefaultEnumerator(PersistentEnumerator.java:52)
+  build_debug.log:41517:	at java.base/java.security.AccessController.doPrivileged(Unknown Source)
+  build_debug.log:41518:	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(Unknown Source)
+  build_debug.log:41519:	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+  build_debug.log:41520:	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+  build_debug.log:41521:	at java.base/java.lang.Thread.run(Unknown Source)
+> build_debug.log:41522:	Suppressed: java.lang.Exception: Storage[C:\Users\jimpg\Documents\projects\TaxiManager\app\build\kspCaches\debug\symbolLookups\id-to-file.tab] registration stack trace
+  build_debug.log:41523:		at org.jetbrains.kotlin.com.intellij.util.io.FilePageCache.registerPagedFileStorage(FilePageCache.java:437)
+  build_debug.log:41524:		at org.jetbrains.kotlin.com.intellij.util.io.PagedFileStorage.<init>(PagedFileStorage.java:72)
+  build_debug.log:41525:		at org.jetbrains.kotlin.com.intellij.util.io.ResizeableMappedFile.<init>(ResizeableMappedFile.java:55)
+  build_debug.log:41526:		at org.jetbrains.kotlin.com.intellij.util.io.PersistentBTreeEnumerator.<init>(PersistentBTreeEnumerator.java:128)
+  build_debug.log:41527:		at org.jetbrains.kotlin.com.intellij.util.io.PersistentEnumerator.createDefaultEnumerator(PersistentEnumerator.java:52)
+  build_debug.log:41538:		at org.jetbrains.kotlin.incremental.LookupStorage.get(LookupStorage.kt:99)
+  build_debug.log:41539:		at com.google.devtools.ksp.LookupStorageWrapperImpl.get(IncrementalContext.kt:224)
+  build_debug.log:41540:		at com.google.devtools.ksp.common.IncrementalContextBase.calcDirtyFiles(IncrementalContextBase.kt:234)
+  build_debug.log:41541:		at com.google.devtools.ksp.AbstractKotlinSymbolProcessingExtension$doAnalysis$2.invoke(KotlinSymbolProcessingExtension.kt:196)
+  build_debug.log:41542:		at com.google.devtools.ksp.AbstractKotlinSymbolProcessingExtension$doAnalysis$2.invoke(KotlinSymbolProcessingExtension.kt:189)
+> build_debug.log:41543:		at com.google.devtools.ksp.AbstractKotlinSymbolProcessingExtension.handleException(KotlinSymbolProcessingExtension.kt:414)
+  build_debug.log:41544:		at com.google.devtools.ksp.AbstractKotlinSymbolProcessingExtension.doAnalysis(KotlinSymbolProcessingExtension.kt:189)
+  build_debug.log:41545:		at org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(TopDownAnalyzerFacadeForJVM.kt:112)
+  build_debug.log:41546:		at org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration$default(TopDownAnalyzerFacadeForJVM.kt:75)
+  build_debug.log:41547:		at org.jetbrains.kotlin.cli.jvm.compiler.KotlinToJVMBytecodeCompiler.analyze$lambda$12(KotlinToJVMBytecodeCompiler.kt:373)
+  build_debug.log:41548:		at org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport.analyzeAndReport(AnalyzerWithCompilerReport.kt:112)
+  build_debug.log:41637:2026-07-23T14:34:22.802+0300 [DEBUG] [org.jetbrains.kotlin.gradle.plugin.KotlinGradleFinishBuildHandler] [KOTLIN] Deleted session-is-alive flag file: C:\Users\jimpg\Documents\projects\TaxiManager\.kotlin\sessions\kotlin-compiler-13025244728307505674.salive
+  build_debug.log:41638:2026-07-23T14:34:22.802+0300 [DEBUG] [org.jetbrains.kotlin.gradle.plugin.KotlinGradleBuildServices$Inject] [KOTLIN] Disposed KotlinGradleBuildServices
+  build_debug.log:41639:2026-07-23T14:34:22.807+0300 [INFO] [com.android.build.gradle.internal.services.Aapt2DaemonBuildService$Inject] AAPT2 aapt2-8.7.3-12006047-windows Daemon #0: shutdown
+  build_debug.log:41640:2026-07-23T14:34:22.814+0300 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Completing Build operation 'Finish root build tree'
+  build_debug.log:41641:2026-07-23T14:34:22.814+0300 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Finish root build tree' completed
+> build_debug.log:41642:2026-07-23T14:34:22.820+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+> build_debug.log:41643:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] FAILURE: Build failed with an exception.
+> build_debug.log:41644:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+> build_debug.log:41645:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] * What went wrong:
+> build_debug.log:41646:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] Execution failed for task ':app:kspDebugKotlin'.
+> build_debug.log:41647:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+> build_debug.log:41648:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter]    > Internal compiler error. See log for more details
+> build_debug.log:41649:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+> build_debug.log:41650:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] * Try:
+> build_debug.log:41651:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] > Run with --stacktrace option to get the stack trace.
+> build_debug.log:41652:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] > Run with --scan to get full insights.
+> build_debug.log:41653:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] > Get more help at https://help.gradle.org.
+  build_debug.log:41654:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildResultLogger] 
+  build_debug.log:41655:2026-07-23T14:34:22.821+0300 [ERROR] [org.gradle.internal.buildevents.BuildResultLogger] BUILD FAILED in 15s
+  build_debug.log:41656:2026-07-23T14:34:22.822+0300 [LIFECYCLE] [org.gradle.internal.buildevents.TaskExecutionStatisticsReporter] 15 actionable tasks: 15 executed
+  build_debug.log:41657:2026-07-23T14:34:22.823+0300 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Build finished for file system watching' started
+  build_debug.log:41658:2026-07-23T14:34:22.829+0300 [INFO] [org.gradle.internal.watch.registry.impl.HierarchicalFileWatcherUpdater] Watched directory hierarchies: [C:\Users\jimpg\Documents\projects\TaxiManager]
+

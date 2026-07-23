@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.jimpgetaxi.taximanager.data.Expense
 import com.jimpgetaxi.taximanager.data.Ride
 import com.jimpgetaxi.taximanager.data.RideRepository
+import com.jimpgetaxi.taximanager.data.Shift
 import com.jimpgetaxi.taximanager.data.ShiftManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -83,6 +85,9 @@ class MainViewModel @Inject constructor(
 
     val isShiftActive: StateFlow<Boolean> = shiftManager.isShiftActiveFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+
+    val activeShiftId: StateFlow<Int?> = shiftManager.activeShiftIdFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     val startOdometer: StateFlow<Double> = shiftManager.startOdometerFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.0)
@@ -164,7 +169,13 @@ class MainViewModel @Inject constructor(
         val odo = odometerStr.replace(",", ".").toDoubleOrNull() ?: return
         val cost = costStr.replace(",", ".").toDoubleOrNull() ?: return
         viewModelScope.launch {
-            shiftManager.startShift(odo, cost, timestamp)
+            val shift = Shift(
+                startTime = timestamp,
+                startOdometer = odo,
+                costPerKm = cost
+            )
+            val shiftId = repository.insertShift(shift).toInt()
+            shiftManager.startShift(shiftId, odo, cost, timestamp)
         }
     }
 
@@ -172,19 +183,29 @@ class MainViewModel @Inject constructor(
         val endOdo = endOdometerStr.replace(",", ".").toDoubleOrNull() ?: return
         val startOdo = startOdometer.value
         val costKm = costPerKm.value
+        val currentShiftId = activeShiftId.value
 
         val distance = endOdo - startOdo
-        if (distance > 0) {
-            val rawCost = distance * costKm
-            val totalCost = kotlin.math.round(rawCost * 10) / 10.0
-            viewModelScope.launch {
-                repository.insertExpense(totalCost, expenseCategoryName, timestamp)
-                shiftManager.endShift()
+        val rawCost = if (distance > 0) distance * costKm else 0.0
+        val totalCost = kotlin.math.round(rawCost * 10) / 10.0
+
+        viewModelScope.launch {
+            // Update Shift in DB
+            if (currentShiftId != null) {
+                val shift = repository.getShiftById(currentShiftId).firstOrNull()
+                if (shift != null) {
+                    repository.updateShift(shift.copy(
+                        endTime = timestamp,
+                        endOdometer = endOdo,
+                        vehicleCost = totalCost
+                    ))
+                }
             }
-        } else {
-            viewModelScope.launch {
-                shiftManager.endShift()
+
+            if (totalCost > 0) {
+                repository.insertExpense(totalCost, expenseCategoryName, currentShiftId, timestamp)
             }
+            shiftManager.endShift()
         }
     }
 
@@ -192,9 +213,10 @@ class MainViewModel @Inject constructor(
         val actual = actualStr.replace(",", ".").toDoubleOrNull() ?: return
         val receipt = receiptStr.replace(",", ".").toDoubleOrNull() ?: return
         val odo = odometerStr.replace(",", ".").toDoubleOrNull()
+        val currentShiftId = activeShiftId.value
         
         viewModelScope.launch {
-            repository.insertRide(actual, receipt, timestamp)
+            repository.insertRide(actual, receipt, currentShiftId, timestamp)
             if (odo != null) {
                 shiftManager.updateCurrentOdometer(odo)
             }
@@ -203,9 +225,45 @@ class MainViewModel @Inject constructor(
 
     fun addExpense(amountStr: String, category: String, timestamp: Long = System.currentTimeMillis()) {
         val amount = amountStr.replace(",", ".").toDoubleOrNull() ?: return
+        val currentShiftId = activeShiftId.value
         
         viewModelScope.launch {
-            repository.insertExpense(amount, category, timestamp)
+            repository.insertExpense(amount, category, currentShiftId, timestamp)
         }
+    }
+
+    // === Shift Detail Queries ===
+    fun getAllShifts() = repository.getAllShifts()
+    fun getShiftById(shiftId: Int) = repository.getShiftById(shiftId)
+    fun getRidesForShift(shiftId: Int) = repository.getRidesForShift(shiftId)
+    fun getExpensesForShift(shiftId: Int) = repository.getExpensesForShift(shiftId)
+
+    fun getRecentActivityForShift(shiftId: Int): Flow<List<ActivityItem>> = combine(
+        repository.getRidesForShift(shiftId),
+        repository.getExpensesForShift(shiftId)
+    ) { rideList, expenseList ->
+        val rideItems = rideList.map { ride ->
+            ActivityItem(
+                id = ride.id,
+                title = "Κούρσα",
+                subtitle = String.format("%.2f € απόδειξη", ride.receiptAmount),
+                amount = ride.actualAmount,
+                isIncome = true,
+                timestamp = ride.timestamp,
+                category = "ride"
+            )
+        }
+        val expenseItems = expenseList.map { expense ->
+            ActivityItem(
+                id = expense.id + 100000,
+                title = expense.category,
+                subtitle = "",
+                amount = expense.amount,
+                isIncome = false,
+                timestamp = expense.timestamp,
+                category = expense.category.lowercase()
+            )
+        }
+        (rideItems + expenseItems).sortedByDescending { it.timestamp }
     }
 }

@@ -19,6 +19,9 @@ interface ExpenseDao {
     @Query("SELECT SUM(amount) FROM expenses WHERE timestamp >= :since")
     fun getTotalExpensesSince(since: Long): Flow<Double?>
 
+    @Query("SELECT * FROM expenses WHERE shiftId = :shiftId ORDER BY timestamp DESC")
+    fun getExpensesForShift(shiftId: Int): Flow<List<Expense>>
+
     @Query("SELECT * FROM expenses WHERE timestamp >= :since ORDER BY timestamp DESC")
     fun getExpensesSince(since: Long): Flow<List<Expense>>
 }

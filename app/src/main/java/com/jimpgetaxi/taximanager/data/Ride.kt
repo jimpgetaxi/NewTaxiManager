@@ -10,5 +10,6 @@ data class Ride(
     val actualAmount: Double,
     val receiptAmount: Double,
     val vatAmount: Double,
+    val shiftId: Int? = null,
     val timestamp: Long = System.currentTimeMillis()
 )

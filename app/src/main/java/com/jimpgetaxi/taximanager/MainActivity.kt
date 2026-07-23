@@ -12,14 +12,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.jimpgetaxi.taximanager.ui.AddRideScreen
+import com.jimpgetaxi.taximanager.ui.HistoryScreen
 import com.jimpgetaxi.taximanager.ui.HomeScreen
 import com.jimpgetaxi.taximanager.ui.MainViewModel
 import com.jimpgetaxi.taximanager.ui.PlaceholderScreen
+import com.jimpgetaxi.taximanager.ui.ShiftDetailScreen
 import com.jimpgetaxi.taximanager.ui.components.AmbientBackground
 import com.jimpgetaxi.taximanager.ui.components.BottomNavBar
 import com.jimpgetaxi.taximanager.ui.theme.TaxiManagerTheme
@@ -87,7 +91,21 @@ class MainActivity : ComponentActivity() {
                                 PlaceholderScreen(title = "Στατιστικά")
                             }
                             composable("shifts") {
-                                PlaceholderScreen(title = "Βάρδιες")
+                                HistoryScreen(
+                                    viewModel = viewModel,
+                                    onNavigateToShiftDetail = { shiftId -> navController.navigate("shift_detail/$shiftId") }
+                                )
+                            }
+                            composable(
+                                route = "shift_detail/{shiftId}",
+                                arguments = listOf(navArgument("shiftId") { type = NavType.IntType })
+                            ) { backStackEntry ->
+                                val shiftId = backStackEntry.arguments?.getInt("shiftId") ?: return@composable
+                                ShiftDetailScreen(
+                                    shiftId = shiftId,
+                                    viewModel = viewModel,
+                                    onBack = { navController.popBackStack() }
+                                )
                             }
                             composable("notifications") {
                                 PlaceholderScreen(title = "Ειδοποιήσεις")

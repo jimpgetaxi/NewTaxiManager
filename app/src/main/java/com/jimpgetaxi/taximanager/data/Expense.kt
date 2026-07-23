@@ -9,5 +9,6 @@ data class Expense(
     val id: Int = 0,
     val amount: Double,
     val category: String,
+    val shiftId: Int? = null,
     val timestamp: Long = System.currentTimeMillis()
 )

@@ -7,7 +7,8 @@ import javax.inject.Singleton
 @Singleton
 class RideRepository @Inject constructor(
     private val dao: RideDao,
-    private val expenseDao: ExpenseDao
+    private val expenseDao: ExpenseDao,
+    private val shiftDao: ShiftDao
 ) {
     fun getAllRides(): Flow<List<Ride>> = dao.getAllRides()
     fun getTotalRevenue(): Flow<Double?> = dao.getTotalRevenue()
@@ -22,7 +23,10 @@ class RideRepository @Inject constructor(
     fun getTotalExpensesSince(since: Long): Flow<Double?> = expenseDao.getTotalExpensesSince(since)
     fun getExpensesSince(since: Long): Flow<List<Expense>> = expenseDao.getExpensesSince(since)
 
-    suspend fun insertRide(actualAmount: Double, receiptAmount: Double, timestamp: Long = System.currentTimeMillis()) {
+    fun getRidesForShift(shiftId: Int): Flow<List<Ride>> = dao.getRidesForShift(shiftId)
+    fun getExpensesForShift(shiftId: Int): Flow<List<Expense>> = expenseDao.getExpensesForShift(shiftId)
+
+    suspend fun insertRide(actualAmount: Double, receiptAmount: Double, shiftId: Int?, timestamp: Long = System.currentTimeMillis()) {
         // Υπολογισμός ΦΠΑ (13%) βάσει της απόδειξης
         val vatAmount = (receiptAmount / 1.13) * 0.13
         
@@ -30,17 +34,30 @@ class RideRepository @Inject constructor(
             actualAmount = actualAmount,
             receiptAmount = receiptAmount,
             vatAmount = vatAmount,
+            shiftId = shiftId,
             timestamp = timestamp
         )
         dao.insertRide(ride)
     }
 
-    suspend fun insertExpense(amount: Double, category: String, timestamp: Long = System.currentTimeMillis()) {
+    suspend fun insertExpense(amount: Double, category: String, shiftId: Int?, timestamp: Long = System.currentTimeMillis()) {
         val expense = Expense(
             amount = amount,
             category = category,
+            shiftId = shiftId,
             timestamp = timestamp
         )
         expenseDao.insertExpense(expense)
     }
+
+    // Shift Operations
+    fun getAllShifts(): Flow<List<Shift>> = shiftDao.getAllShifts()
+    
+    fun getShiftById(shiftId: Int): Flow<Shift> = shiftDao.getShiftById(shiftId)
+
+    suspend fun insertShift(shift: Shift): Long = shiftDao.insertShift(shift)
+
+    suspend fun updateShift(shift: Shift) = shiftDao.updateShift(shift)
+
+    suspend fun deleteShift(shift: Shift) = shiftDao.deleteShift(shift)
 }

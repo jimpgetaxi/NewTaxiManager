@@ -26,6 +26,9 @@ interface RideDao {
     @Query("SELECT SUM(actualAmount) FROM rides WHERE timestamp >= :since")
     fun getTotalRevenueSince(since: Long): Flow<Double?>
 
-    @Query("SELECT SUM(vatAmount) FROM rides WHERE timestamp >= :since")
-    fun getTotalVatSince(since: Long): Flow<Double?>
+    @Query("SELECT SUM(vatAmount) FROM rides WHERE timestamp >= :sinceTimestamp")
+    fun getTotalVatSince(sinceTimestamp: Long): Flow<Double?>
+
+    @Query("SELECT * FROM rides WHERE shiftId = :shiftId ORDER BY timestamp DESC")
+    fun getRidesForShift(shiftId: Int): Flow<List<Ride>>
 }
