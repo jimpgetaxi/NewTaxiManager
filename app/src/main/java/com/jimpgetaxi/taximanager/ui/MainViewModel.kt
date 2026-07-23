@@ -87,16 +87,16 @@ class MainViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
     val activeShiftId: StateFlow<Int?> = shiftManager.activeShiftIdFlow
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     val startOdometer: StateFlow<Double> = shiftManager.startOdometerFlow
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.0)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
 
     val costPerKm: StateFlow<Double> = shiftManager.costPerKmFlow
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.22)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, 0.22)
 
     val currentOdometer: StateFlow<Double> = shiftManager.currentOdometerFlow
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0.0)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
 
     val userName: StateFlow<String> = shiftManager.userNameFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "")
