@@ -116,7 +116,7 @@ fun AddRideScreen(
             OutlinedTextField(
                 value = receiptAmount,
                 onValueChange = { receiptAmount = it },
-                label = { Text(stringResource(R.string.receipt_amount_label)) },
+                label = { Text(stringResource(R.string.receipt_amount_label) + " (Προαιρετικό)") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
                 shape = FieldShape,
@@ -184,8 +184,9 @@ fun AddRideScreen(
             // Save button
             Button(
                 onClick = {
-                    if (actualAmount.isNotBlank() && receiptAmount.isNotBlank()) {
-                        viewModel.addRide(actualAmount, receiptAmount, currentOdometer, timestamp)
+                    if (actualAmount.isNotBlank()) {
+                        val finalReceipt = if (receiptAmount.isBlank()) "0" else receiptAmount
+                        viewModel.addRide(actualAmount, finalReceipt, currentOdometer, timestamp)
                         onBack()
                     }
                 },
