@@ -57,7 +57,8 @@ fun HistoryScreen(
                 }
             } else {
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = PaddingValues(bottom = 100.dp)
                 ) {
                     items(shifts) { shift ->
                         ShiftCard(shift = shift, onClick = { onNavigateToShiftDetail(shift.id) })

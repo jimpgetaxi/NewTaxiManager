@@ -41,6 +41,7 @@ fun HomeScreen(
     var showStartShiftDialog by remember { mutableStateOf(false) }
     var showEndShiftDialog by remember { mutableStateOf(false) }
     var showNameDialog by remember { mutableStateOf(false) }
+    var showAllActivity by remember { mutableStateOf(false) }
 
     // Show name dialog ONLY on confirmed first launch (onboardingDone = false from DataStore)
     LaunchedEffect(onboardingDone) {
@@ -185,13 +186,29 @@ fun HomeScreen(
         }
 
         // Activity Rows
-        items(recentActivity, key = { it.id }) { item ->
+        val visibleActivity = if (showAllActivity) recentActivity else recentActivity.take(5)
+        
+        items(visibleActivity, key = { it.id }) { item ->
             ActivityRow(item = item)
+        }
+        
+        if (recentActivity.size > 5) {
+            item {
+                TextButton(
+                    onClick = { showAllActivity = !showAllActivity },
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
+                ) {
+                    Text(
+                        text = if (showAllActivity) "Λιγότερα" else "Περισσότερα (Load More)",
+                        color = BrandAccent
+                    )
+                }
+            }
         }
 
         // Bottom spacing for floating nav bar
         item {
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(100.dp)) // Increased spacing to be safe
         }
     }
 

@@ -27,6 +27,7 @@ fun BottomNavBar(
 ) {
     Box(
         modifier = modifier
+            .navigationBarsPadding()
             .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
             .fillMaxWidth()
             .glassmorphism(cornerRadius = 32.dp)

@@ -33,7 +33,7 @@ fun ShiftDetailScreen(
     var showEditShift by remember { mutableStateOf(false) }
     var selectedActivity by remember { mutableStateOf<ActivityItem?>(null) }
     
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().navigationBarsPadding()) {
         AmbientBackground()
 
         Column(modifier = Modifier.fillMaxSize()) {
