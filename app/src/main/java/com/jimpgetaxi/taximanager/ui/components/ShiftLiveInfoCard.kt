@@ -65,7 +65,7 @@ fun ShiftLiveInfoCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .glassmorphism(16.dp, backgroundColor = CardSurface.copy(alpha = 0.5f))
+                .glassmorphism(16.dp)
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -81,7 +81,7 @@ fun ShiftLiveInfoCard(
                 Text(
                     text = "Κόστος Οχήματος",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = TextSecondary
+                    color = TextPrimary
                 )
             }
             Text(
