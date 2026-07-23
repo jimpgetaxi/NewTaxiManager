@@ -121,7 +121,18 @@ fun ShiftDetailScreen(
         var startOdo by remember { mutableStateOf(shift!!.startOdometer.toString()) }
         var endOdo by remember { mutableStateOf(shift!!.endOdometer?.toString() ?: "") }
         var costKm by remember { mutableStateOf(shift!!.costPerKm.toString()) }
-        var vehCost by remember { mutableStateOf(shift!!.vehicleCost?.toString() ?: "") }
+        
+        val autoVehCost = remember(startOdo, endOdo, costKm) {
+            val s = startOdo.replace(",", ".").toDoubleOrNull() ?: 0.0
+            val e = endOdo.replace(",", ".").toDoubleOrNull() ?: 0.0
+            val c = costKm.replace(",", ".").toDoubleOrNull() ?: 0.0
+            if (e > s) {
+                kotlin.math.round((e - s) * c * 10) / 10.0
+            } else {
+                0.0
+            }
+        }
+        var vehCost by remember(autoVehCost) { mutableStateOf(autoVehCost.toString()) }
 
         AlertDialog(
             onDismissRequest = { showEditShift = false },
@@ -153,7 +164,7 @@ fun ShiftDetailScreen(
                     OutlinedTextField(
                         value = vehCost,
                         onValueChange = { vehCost = it },
-                        label = { Text("Κόστος Φθοράς (€)") },
+                        label = { Text("Κόστος Φθοράς (€) (Αυτόματα)") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                         colors = OutlinedTextFieldDefaults.colors(focusedTextColor = TextPrimary, unfocusedTextColor = TextPrimary)
                     )

@@ -289,6 +289,16 @@ class MainViewModel @Inject constructor(
                     costPerKm = costPerKm,
                     vehicleCost = vehicleCost
                 ))
+                
+                if (vehicleCost != null) {
+                    val expenses = repository.getExpensesForShift(shiftId).firstOrNull()
+                    val expense = expenses?.find { it.category.contains("Φθορά") }
+                    if (expense != null) {
+                        repository.updateExpense(expense.copy(amount = vehicleCost))
+                    } else if (vehicleCost > 0) {
+                        repository.insertExpense(vehicleCost, "Φθορά Οχήματος", shiftId, shift.endTime ?: System.currentTimeMillis())
+                    }
+                }
             }
         }
     }
