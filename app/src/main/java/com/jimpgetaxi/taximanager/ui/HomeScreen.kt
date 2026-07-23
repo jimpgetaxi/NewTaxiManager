@@ -125,6 +125,7 @@ fun HomeScreen(
         item {
             val fuelCategoryName = stringResource(R.string.cat_fuel)
             QuickActions(
+                isShiftActive = isShiftActive,
                 onIncomeClick = onNavigateToAddRide,
                 onExpenseClick = {
                     expenseDefaultCategory = ""
