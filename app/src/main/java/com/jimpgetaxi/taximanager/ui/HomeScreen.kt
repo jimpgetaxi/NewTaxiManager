@@ -29,7 +29,9 @@ fun HomeScreen(
     val totalExpenses by viewModel.totalExpenses.collectAsState()
     val isShiftActive by viewModel.isShiftActive.collectAsState()
     val startOdometer by viewModel.startOdometer.collectAsState()
+    val currentOdometer by viewModel.currentOdometer.collectAsState()
     val costPerKm by viewModel.costPerKm.collectAsState()
+    val liveVehicleCost by viewModel.liveVehicleCost.collectAsState()
     val recentActivity by viewModel.recentActivity.collectAsState()
     val userName by viewModel.userName.collectAsState()
     val onboardingDone by viewModel.onboardingDone.collectAsState()
@@ -119,6 +121,17 @@ fun HomeScreen(
                 sparklineData = viewModel.incomeSparkline,
                 isShiftActive = isShiftActive
             )
+        }
+
+        // Shift Live Info
+        if (isShiftActive) {
+            item {
+                ShiftLiveInfoCard(
+                    startOdo = startOdometer,
+                    currentOdo = currentOdometer,
+                    vehicleCost = liveVehicleCost
+                )
+            }
         }
 
         // Quick Actions
