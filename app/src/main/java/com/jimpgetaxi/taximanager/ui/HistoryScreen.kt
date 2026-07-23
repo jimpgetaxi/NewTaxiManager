@@ -26,7 +26,7 @@ fun HistoryScreen(
     viewModel: MainViewModel,
     onNavigateToShiftDetail: (Int) -> Unit
 ) {
-    val shifts by viewModel.getAllShifts().collectAsState(initial = emptyList())
+    val shifts by viewModel.allShifts.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         AmbientBackground()

@@ -233,7 +233,9 @@ class MainViewModel @Inject constructor(
     }
 
     // === Shift Detail Queries ===
-    fun getAllShifts() = repository.getAllShifts()
+    val allShifts: StateFlow<List<Shift>> = repository.getAllShifts()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     fun getShiftById(shiftId: Int) = repository.getShiftById(shiftId)
     fun getRidesForShift(shiftId: Int) = repository.getRidesForShift(shiftId)
     fun getExpensesForShift(shiftId: Int) = repository.getExpensesForShift(shiftId)
@@ -265,5 +267,61 @@ class MainViewModel @Inject constructor(
             )
         }
         (rideItems + expenseItems).sortedByDescending { it.timestamp }
+    }
+
+    // === Edit & Delete Actions ===
+    fun deleteShift(shiftId: Int) {
+        viewModelScope.launch {
+            val shift = repository.getShiftById(shiftId).firstOrNull()
+            if (shift != null) {
+                repository.deleteShift(shift)
+            }
+        }
+    }
+
+    fun updateShiftDetails(shiftId: Int, startOdo: Double, endOdo: Double?, costPerKm: Double, vehicleCost: Double?) {
+        viewModelScope.launch {
+            val shift = repository.getShiftById(shiftId).firstOrNull()
+            if (shift != null) {
+                repository.updateShift(shift.copy(
+                    startOdometer = startOdo,
+                    endOdometer = endOdo,
+                    costPerKm = costPerKm,
+                    vehicleCost = vehicleCost
+                ))
+            }
+        }
+    }
+
+    fun deleteActivityItem(item: ActivityItem) {
+        viewModelScope.launch {
+            if (item.category == "ride") {
+                // To delete a ride, we need to fetch it or create a dummy with the id
+                repository.deleteRide(Ride(id = item.id, actualAmount = 0.0, receiptAmount = 0.0, vatAmount = 0.0))
+            } else {
+                repository.deleteExpense(Expense(id = item.id - 100000, amount = 0.0, category = ""))
+            }
+        }
+    }
+
+    fun updateActivityItem(item: ActivityItem, newAmount: Double, newSubtitle: Double? = null) {
+        viewModelScope.launch {
+            if (item.category == "ride") {
+                // Fetch existing ride
+                val rides = repository.getRidesSince(0).firstOrNull()
+                val ride = rides?.find { it.id == item.id }
+                if (ride != null) {
+                    val receipt = newSubtitle ?: ride.receiptAmount
+                    val vat = (receipt / 1.13) * 0.13
+                    repository.updateRide(ride.copy(actualAmount = newAmount, receiptAmount = receipt, vatAmount = vat))
+                }
+            } else {
+                val expenses = repository.getExpensesSince(0).firstOrNull()
+                val expense = expenses?.find { it.id == item.id - 100000 }
+                if (expense != null) {
+                    repository.updateExpense(expense.copy(amount = newAmount))
+                }
+            }
+        }
     }
 }

@@ -1,15 +1,26 @@
 package com.jimpgetaxi.taximanager.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RideDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRide(ride: Ride)
+
+    @Update
+    suspend fun updateRide(ride: Ride)
+
+    @Delete
+    suspend fun deleteRide(ride: Ride)
+
+    @Query("DELETE FROM rides WHERE shiftId = :shiftId")
+    suspend fun deleteRidesForShift(shiftId: Int)
 
     @Query("SELECT * FROM rides ORDER BY timestamp DESC")
     fun getAllRides(): Flow<List<Ride>>

@@ -40,6 +40,9 @@ class RideRepository @Inject constructor(
         dao.insertRide(ride)
     }
 
+    suspend fun updateRide(ride: Ride) = dao.updateRide(ride)
+    suspend fun deleteRide(ride: Ride) = dao.deleteRide(ride)
+
     suspend fun insertExpense(amount: Double, category: String, shiftId: Int?, timestamp: Long = System.currentTimeMillis()) {
         val expense = Expense(
             amount = amount,
@@ -50,6 +53,9 @@ class RideRepository @Inject constructor(
         expenseDao.insertExpense(expense)
     }
 
+    suspend fun updateExpense(expense: Expense) = expenseDao.updateExpense(expense)
+    suspend fun deleteExpense(expense: Expense) = expenseDao.deleteExpense(expense)
+
     // Shift Operations
     fun getAllShifts(): Flow<List<Shift>> = shiftDao.getAllShifts()
     
@@ -59,5 +65,9 @@ class RideRepository @Inject constructor(
 
     suspend fun updateShift(shift: Shift) = shiftDao.updateShift(shift)
 
-    suspend fun deleteShift(shift: Shift) = shiftDao.deleteShift(shift)
+    suspend fun deleteShift(shift: Shift) {
+        shiftDao.deleteShift(shift)
+        dao.deleteRidesForShift(shift.id)
+        expenseDao.deleteExpensesForShift(shift.id)
+    }
 }
