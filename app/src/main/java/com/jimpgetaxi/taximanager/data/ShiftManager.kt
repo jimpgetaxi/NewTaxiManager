@@ -24,6 +24,7 @@ class ShiftManager @Inject constructor(@ApplicationContext private val context: 
         val ACTIVE_SHIFT_ID = intPreferencesKey("active_shift_id")
         val USER_NAME = stringPreferencesKey("user_name")
         val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
+        val WEAR_FUND = doublePreferencesKey("wear_fund")
     }
 
     val isShiftActiveFlow: Flow<Boolean> = context.dataStore.data.map { prefs ->
@@ -58,6 +59,10 @@ class ShiftManager @Inject constructor(@ApplicationContext private val context: 
         prefs[ONBOARDING_DONE] ?: false
     }
 
+    val wearFundFlow: Flow<Double> = context.dataStore.data.map { prefs ->
+        prefs[WEAR_FUND] ?: 0.0
+    }
+
     suspend fun startShift(shiftId: Int, startOdometer: Double, costPerKm: Double, timestamp: Long = System.currentTimeMillis()) {
         context.dataStore.edit { prefs ->
             prefs[IS_SHIFT_ACTIVE] = true
@@ -87,6 +92,12 @@ class ShiftManager @Inject constructor(@ApplicationContext private val context: 
         context.dataStore.edit { prefs ->
             prefs[USER_NAME] = name
             prefs[ONBOARDING_DONE] = true
+        }
+    }
+
+    suspend fun updateWearFund(fund: Double) {
+        context.dataStore.edit { prefs ->
+            prefs[WEAR_FUND] = fund
         }
     }
 }

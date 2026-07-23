@@ -134,3 +134,55 @@ private fun SummaryCard(
         }
     }
 }
+
+@Composable
+fun WearFundCard(
+    fund: Double,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .glassmorphism(cornerRadius = 20.dp)
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(BrandAccent.copy(alpha = 0.2f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowUpward, // Just a placeholder, we can use a generic icon later
+                    contentDescription = null,
+                    tint = BrandAccent,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Text(
+                    text = "Ταμείο Φθοράς",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = TextSecondary
+                )
+                Text(
+                    text = "Τρέχον Διαθέσιμο",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = TextTertiary
+                )
+            }
+        }
+        
+        val formattedFund = NumberFormat.getCurrencyInstance(Locale("el", "GR")).format(fund)
+        Text(
+            text = formattedFund,
+            style = MaterialTheme.typography.headlineMedium,
+            color = TextPrimary
+        )
+    }
+}

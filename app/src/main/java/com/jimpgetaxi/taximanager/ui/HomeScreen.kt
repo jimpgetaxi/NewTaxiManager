@@ -34,6 +34,7 @@ fun HomeScreen(
     val liveVehicleCost by viewModel.liveVehicleCost.collectAsState()
     val recentActivity by viewModel.recentActivity.collectAsState()
     val userName by viewModel.userName.collectAsState()
+    val wearFund by viewModel.wearFund.collectAsState()
     val onboardingDone by viewModel.onboardingDone.collectAsState()
 
     var showExpenseSheet by remember { mutableStateOf(false) }
@@ -168,6 +169,12 @@ fun HomeScreen(
             )
         }
 
+        // Wear Fund Card
+        item {
+            val liveFund = if (isShiftActive) wearFund + liveVehicleCost else wearFund
+            WearFundCard(fund = liveFund)
+        }
+
         // Performance Chart
         item {
             PerformanceChart(
@@ -226,9 +233,10 @@ fun HomeScreen(
     if (showStartShiftDialog) {
         StartShiftDialog(
             initialCostPerKm = costPerKm,
+            initialWearFund = wearFund,
             onDismiss = { showStartShiftDialog = false },
-            onConfirm = { odo, cost, timestamp ->
-                viewModel.startShift(odo, cost, timestamp)
+            onConfirm = { odo, cost, fund, timestamp ->
+                viewModel.startShift(odo, cost, fund, timestamp)
                 showStartShiftDialog = false
             }
         )

@@ -101,6 +101,9 @@ class MainViewModel @Inject constructor(
     val userName: StateFlow<String> = shiftManager.userNameFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "")
 
+    val wearFund: StateFlow<Double> = shiftManager.wearFundFlow
+        .stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
+
     val onboardingDone: StateFlow<Boolean> = shiftManager.onboardingDoneFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true) // Default true to prevent flash
 
@@ -165,10 +168,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun startShift(odometerStr: String, costStr: String, timestamp: Long = System.currentTimeMillis()) {
+    fun startShift(odometerStr: String, costStr: String, fundStr: String, timestamp: Long = System.currentTimeMillis()) {
         val odo = odometerStr.replace(",", ".").toDoubleOrNull() ?: return
         val cost = costStr.replace(",", ".").toDoubleOrNull() ?: return
+        val fund = fundStr.replace(",", ".").toDoubleOrNull() ?: wearFund.value
         viewModelScope.launch {
+            shiftManager.updateWearFund(fund)
             val shift = Shift(
                 startTime = timestamp,
                 startOdometer = odo,
@@ -204,6 +209,8 @@ class MainViewModel @Inject constructor(
 
             if (totalCost > 0) {
                 repository.insertExpense(totalCost, expenseCategoryName, currentShiftId, timestamp)
+                val newFund = wearFund.value + totalCost
+                shiftManager.updateWearFund(newFund)
             }
             shiftManager.endShift()
         }

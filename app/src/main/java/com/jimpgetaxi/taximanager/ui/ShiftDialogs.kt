@@ -22,11 +22,13 @@ private val FieldShape = RoundedCornerShape(20.dp)
 @Composable
 fun StartShiftDialog(
     initialCostPerKm: Double,
+    initialWearFund: Double,
     onDismiss: () -> Unit,
-    onConfirm: (odometer: String, costPerKm: String, timestamp: Long) -> Unit
+    onConfirm: (odometer: String, costPerKm: String, fund: String, timestamp: Long) -> Unit
 ) {
     var odo by remember { mutableStateOf("") }
     var cost by remember { mutableStateOf(initialCostPerKm.toString()) }
+    var fund by remember { mutableStateOf(String.format(Locale.US, "%.2f", initialWearFund)) }
     var timestamp by remember { mutableStateOf(System.currentTimeMillis()) }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -101,6 +103,28 @@ fun StartShiftDialog(
                         unfocusedContainerColor = CardSurface
                     )
                 )
+                Spacer(modifier = Modifier.height(14.dp))
+
+                OutlinedTextField(
+                    value = fund,
+                    onValueChange = { fund = it },
+                    label = { Text("Τρέχον Ταμείο Φθοράς (€)") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = FieldShape,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = PositiveGreen,
+                        unfocusedBorderColor = CardBorder,
+                        focusedTextColor = TextPrimary,
+                        unfocusedTextColor = TextPrimary,
+                        focusedLabelColor = PositiveGreen,
+                        unfocusedLabelColor = TextSecondary,
+                        cursorColor = PositiveGreen,
+                        focusedContainerColor = CardSurface,
+                        unfocusedContainerColor = CardSurface
+                    )
+                )
+
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
@@ -113,8 +137,8 @@ fun StartShiftDialog(
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
                         onClick = {
-                            if (odo.isNotBlank() && cost.isNotBlank()) {
-                                onConfirm(odo, cost, timestamp)
+                            if (odo.isNotBlank() && cost.isNotBlank() && fund.isNotBlank()) {
+                                onConfirm(odo, cost, fund, timestamp)
                             }
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = PositiveGreen),
